@@ -8,10 +8,37 @@
     <script>
       // 防止主题闪烁，在页面加载前应用主题
       (function() {
+        // 1. 添加 disable-transition class 禁用过渡动画
+        document.documentElement.classList.add('disable-transition');
+
         const THEME_STORAGE_KEY = 'xiny-theme-preference';
-        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        const theme = savedTheme && (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : 'dark';
+        let theme = 'dark'; // 默认暗色主题
+
+        // 2. 尝试读取 localStorage 用户偏好（带容错处理）
+        try {
+          const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+          if (savedTheme === 'dark' || savedTheme === 'light') {
+            theme = savedTheme;
+          } else if (savedTheme === null) {
+            // 3. localStorage 无记录时，检测系统偏好
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+              theme = 'light';
+            }
+          }
+        } catch (e) {
+          // localStorage 不可用（如 Safari 私密模式），静默降级
+          // 尝试检测系统偏好
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            theme = 'light';
+          }
+        }
+
+        // 应用主题
         document.documentElement.setAttribute('data-theme', theme);
+
+        // 4. 强制重绘后移除 disable-transition class
+        document.documentElement.offsetHeight; // 触发强制重绘
+        document.documentElement.classList.remove('disable-transition');
       })();
     </script>
   </head>

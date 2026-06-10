@@ -108,7 +108,7 @@ onUnmounted(() => {
 }
 
 .navbar-scrolled {
-  border-bottom-color: var(--color-accent-light);
+  border-bottom-color: var(--color-navbar-border);
   box-shadow: var(--shadow-md);
 }
 
@@ -243,7 +243,7 @@ onUnmounted(() => {
   right: 0;
   background: var(--color-navbar-bg-solid);
   backdrop-filter: blur(10px);
-  border-top: 1px solid var(--color-accent-light);
+  border-top: 1px solid var(--color-navbar-border);
   padding: 1rem 0;
   transform: translateY(-100%);
   opacity: 0;
