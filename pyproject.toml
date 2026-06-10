@@ -1,0 +1,18 @@
+[project]
+name = "xinysoft"
+version = "1.0.0"
+description = "个人作品集网站后端 API"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi~=0.136.3",
+    "uvicorn[standard]~=0.30.0",
+    "pymysql~=1.1.0",
+    "python-dotenv~=1.0.0",
+    "mangum~=0.21.0",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk",
+]
