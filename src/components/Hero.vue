@@ -25,6 +25,7 @@
               :key="index"
               class="tech-tag"
               :style="{ animationDelay: `${index * 0.1}s` }"
+              @click="handleTagClick(tag)"
             >
               {{ tag }}
             </span>
@@ -140,9 +141,24 @@ const showContactModal = ref(false)
 const avatarError = ref(false)
 
 const defaultTags = ['Vue3', 'FastAPI', 'MySQL', 'OpenClaw', 'HarmonyOS', 'ECharts']
+const tagUrls = {
+  'Vue3': 'https://cn.vuejs.org/',
+  'FastAPI': 'https://fastapi.tiangolo.com/zh/',
+  'MySQL': 'https://www.mysql.com/',
+  'OpenClaw': 'https://openclaw.ai/',
+  'HarmonyOS': 'https://developer.huawei.com/consumer/cn/harmonyos/',
+  'ECharts': 'https://echarts.apache.org/zh/index.html'
+}
 const defaultEmails = ['12074835619@qq.com', 'xin_y0607@outlook.com', 'xiny0607.23@gmail.com', '13886527881@163.com']
 const defaultWechat = 'Yyk-293342'
 const defaultQQ = '12074835619'
+
+const handleTagClick = (tag) => {
+  const url = tagUrls[tag]
+  if (url) {
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+}
 
 const avatarUrl = computed(() => {
   // 如果头像加载失败或没有头像URL，使用默认头像
@@ -314,6 +330,7 @@ onMounted(() => {
   border: 1px solid rgba(233, 69, 96, 0.2);
   transition: all 0.3s ease;
   animation: fadeInUp 0.6s ease-out backwards;
+  cursor: pointer;
 }
 
 @keyframes fadeInUp {
