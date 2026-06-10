@@ -10,6 +10,14 @@
         <a href="#hero" class="nav-link" :class="{ active: activeSection === 'hero' }">
           首页
         </a>
+        <button
+          class="theme-toggle"
+          @click="toggleTheme"
+          :aria-label="currentTheme === 'dark' ? '切换到亮色主题' : '切换到暗色主题'"
+        >
+          <span class="theme-icon" v-if="currentTheme === 'dark'">☀️</span>
+          <span class="theme-icon" v-else>🌙</span>
+        </button>
       </div>
 
       <!-- 移动端汉堡菜单 -->
@@ -25,16 +33,27 @@
       <a href="#hero" class="mobile-nav-link" @click="closeMenu">
         首页
       </a>
+      <button
+        class="mobile-theme-toggle"
+        @click="toggleTheme"
+        :aria-label="currentTheme === 'dark' ? '切换到亮色主题' : '切换到暗色主题'"
+      >
+        <span class="theme-icon" v-if="currentTheme === 'dark'">☀️</span>
+        <span class="theme-icon" v-else>🌙</span>
+        <span class="theme-text">{{ currentTheme === 'dark' ? '亮色主题' : '暗色主题' }}</span>
+      </button>
     </div>
   </nav>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useTheme } from '../composables/useTheme'
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
 const activeSection = ref('hero')
+const { currentTheme, toggleTheme } = useTheme()
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50
@@ -82,15 +101,15 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(26, 26, 46, 0.95);
+  background: var(--color-navbar-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
 }
 
 .navbar-scrolled {
-  border-bottom-color: rgba(233, 69, 96, 0.2);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  border-bottom-color: var(--color-accent-light);
+  box-shadow: var(--shadow-md);
 }
 
 .navbar-container {
@@ -151,6 +170,40 @@ onUnmounted(() => {
   width: 100%;
 }
 
+/* PC端主题切换按钮 */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--color-accent-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-icon {
+  font-size: 1.2rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+  transform: rotate(15deg);
+}
+
 .hamburger {
   display: none;
   flex-direction: column;
@@ -188,9 +241,9 @@ onUnmounted(() => {
   top: 70px;
   left: 0;
   right: 0;
-  background: rgba(26, 26, 46, 0.98);
+  background: var(--color-navbar-bg-solid);
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(233, 69, 96, 0.2);
+  border-top: 1px solid var(--color-accent-light);
   padding: 1rem 0;
   transform: translateY(-100%);
   opacity: 0;
@@ -213,7 +266,33 @@ onUnmounted(() => {
 
 .mobile-nav-link:hover {
   color: var(--color-accent);
-  background: rgba(233, 69, 96, 0.1);
+  background: var(--color-accent-light);
+}
+
+/* 移动端主题切换按钮 */
+.mobile-theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem 2rem;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.mobile-theme-toggle:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.mobile-theme-toggle .theme-icon {
+  font-size: 1.2rem;
+}
+
+.mobile-theme-toggle .theme-text {
+  flex: 1;
 }
 
 @media (max-width: 768px) {

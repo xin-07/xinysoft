@@ -5,6 +5,15 @@
     <link rel="icon" type="image/png" href="/logo2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>xinysoft</title>
+    <script>
+      // 防止主题闪烁，在页面加载前应用主题
+      (function() {
+        const THEME_STORAGE_KEY = 'xiny-theme-preference';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const theme = savedTheme && (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
