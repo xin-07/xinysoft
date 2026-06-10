@@ -9,6 +9,7 @@
   --color-surface: #0f3460;         /* 卡片/区域表面色 */
   --color-accent: #e94560;          /* 强调色（如按钮、高亮） */
   --color-accent-light: rgba(233, 69, 96, 0.1); /* 标签背景 */
+  --color-accent-hover: #d13a52;                /* 强调色悬停态 */
 
   /* 文本色 */
   --color-text-primary: #e6e6e6;    /* 主要文字 */
@@ -19,6 +20,9 @@
   --color-navbar-bg: rgba(26, 26, 46, 0.95);
   --color-navbar-bg-solid: rgba(26, 26, 46, 0.98);
   --color-navbar-border: rgba(255,255,255,0.1);
+
+  /* 通用边框色 */
+  --color-border: rgba(255, 255, 255, 0.1);
 
   /* 字体栈 */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -70,11 +74,15 @@
   /* 强调色 */
   --color-accent: #e94560;
   --color-accent-light: rgba(233, 69, 96, 0.15);
+  --color-accent-hover: #c2304a;                /* 强调色悬停态（亮色稍深） */
 
   /* 导航栏背景色 */
   --color-navbar-bg: rgba(248, 249, 250, 0.95);
   --color-navbar-bg-solid: rgba(255, 255, 255, 0.98);
   --color-navbar-border: rgba(0,0,0,0.1);
+
+  /* 通用边框色 */
+  --color-border: rgba(0, 0, 0, 0.1);
 
   /* 阴影（亮色主题使用更柔和的阴影） */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);

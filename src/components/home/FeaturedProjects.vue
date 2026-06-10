@@ -125,6 +125,26 @@ onMounted(() => {
   gap: 1.5rem;
 }
 
+/* 卡片入场动画 */
+.featured-projects__grid > * {
+  animation: featuredCardEntrance 0.4s ease-out both;
+}
+
+.featured-projects__grid > *:nth-child(1) { animation-delay: 0.05s; }
+.featured-projects__grid > *:nth-child(2) { animation-delay: 0.15s; }
+.featured-projects__grid > *:nth-child(3) { animation-delay: 0.25s; }
+
+@keyframes featuredCardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* 骨架屏样式 */
 .featured-projects__skeleton-link {
   width: 80px;

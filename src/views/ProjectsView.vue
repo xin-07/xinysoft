@@ -133,6 +133,26 @@ onMounted(() => {
   gap: 2rem;
 }
 
+/* 卡片入场动画 */
+.projects-grid > * {
+  animation: cardEntrance 0.4s ease-out both;
+}
+
+.projects-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.projects-grid > *:nth-child(2) { animation-delay: 0.15s; }
+.projects-grid > *:nth-child(3) { animation-delay: 0.25s; }
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* 骨架屏 */
 .skeleton-card {
   background: var(--color-surface);

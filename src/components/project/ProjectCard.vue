@@ -26,12 +26,12 @@
         class="project-card__placeholder"
         :style="gradientStyle"
       >
-        <span class="project-card__letter">{{ firstLetter }}</span>
+        <span class="project-card__letter">{{ brandName }}</span>
       </div>
     </div>
 
     <!-- 内容区域 -->
-    <div class="project-card__content">
+    <div class="project-card__content" :style="cardContentStyle">
       <!-- 技术栈标签 -->
       <div class="project-card__tags">
         <span
@@ -85,7 +85,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getTagColor } from '../../config/techStackColors'
+import { getTagColor, getTagBackgroundColor } from '../../config/techStackColors'
 
 const props = defineProps({
   project: {
@@ -101,19 +101,24 @@ const props = defineProps({
 
 const router = useRouter()
 
-// 获取项目名称首字母
-const firstLetter = computed(() => {
-  const title = props.project?.title || ''
-  return title.charAt(0).toUpperCase()
+// 根据项目 id 返回品牌名称（替代原来的首字母）
+const brandName = computed(() => {
+  const id = props.project?.id
+  const names = {
+    1: '鲜途智送',
+    2: '昕悦读',
+    3: 'xinysoft'
+  }
+  return names[id] || ''
 })
 
 // 根据项目 id 计算渐变色
 const gradientStyle = computed(() => {
   const id = props.project?.id
   const gradients = {
-    1: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // 蓝紫渐变
-    2: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)', // 青绿渐变
-    3: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'  // 橙红渐变
+    1: 'linear-gradient(135deg, #e94560 0%, #ff6b81 100%)',  // 鲜途智送 — 粉红→浅粉
+    2: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',  // 昕悦读 — 深海蓝→暮光紫
+    3: 'linear-gradient(135deg, #303d7a 0%, #6b4794 100%)'   // xinysoft — 靛蓝→紫罗兰
   }
   return {
     background: gradients[id] || gradients[1]
@@ -136,12 +141,16 @@ const displayedTechStack = computed(() => {
   return techStack.value
 })
 
-// 获取标签背景色（浅色版本）
-const getTagBackgroundColor = (tech) => {
-  const color = getTagColor(tech)
-  // 将颜色转换为浅色背景
-  return `${color}20` // 添加 20% 透明度
-}
+// 卡片背景色与封面渐变呼应（末端色以极低透明度延展到内容区顶部）
+const cardContentStyle = computed(() => {
+  const id = props.project?.id
+  const tints = {
+    1: 'linear-gradient(180deg, rgba(255, 107, 129, 0.06) 0%, transparent 40%)',
+    2: 'linear-gradient(180deg, rgba(78, 67, 118, 0.06) 0%, transparent 40%)',
+    3: 'linear-gradient(180deg, rgba(107, 71, 148, 0.06) 0%, transparent 40%)'
+  }
+  return { background: tints[id] || tints[1] }
+})
 
 // 点击卡片跳转到详情页
 const handleCardClick = () => {
@@ -218,14 +227,23 @@ const openLiveUrl = () => {
   align-items: center;
   justify-content: center;
   min-height: 120px;
+  background-size: 250% 250%;
+  animation: gradientShift 6s ease-in-out infinite alternate;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 100%; }
 }
 
 .project-card__letter {
-  font-size: 3rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   user-select: none;
+  letter-spacing: 0.1em;
   transition: transform 0.3s ease;
 }
 
@@ -325,7 +343,7 @@ const openLiveUrl = () => {
 }
 
 .project-card__btn--primary:hover {
-  background: var(--color-accent-hover, #d63d56);
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
 }
 
@@ -364,7 +382,7 @@ const openLiveUrl = () => {
   }
 
   .project-card__letter {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
   }
 }
 

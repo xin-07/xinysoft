@@ -62,7 +62,7 @@
             v-for="tech in project.tech_stack"
             :key="tech"
             class="tech-tag"
-            :style="{ backgroundColor: getTagColor(tech) }"
+            :style="{ backgroundColor: getTagBackgroundColor(tech), color: getTagColor(tech) }"
           >
             {{ tech }}
           </span>
@@ -99,7 +99,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { projectsAPI } from '../api'
-import { getTagColor } from '../config/techStackColors'
+import { getTagColor, getTagBackgroundColor } from '../config/techStackColors'
 import ProjectBanner from '../components/project/ProjectBanner.vue'
 
 const route = useRoute()
@@ -268,7 +268,7 @@ onMounted(() => {
 
 .back-to-list:hover,
 .retry-btn:hover {
-  background: #d13a52;
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
 }
 
@@ -329,14 +329,13 @@ onMounted(() => {
   border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: white;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: default;
+  backdrop-filter: blur(2px);
 }
 
 .tech-tag:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 项目描述 */
@@ -369,7 +368,7 @@ onMounted(() => {
 }
 
 .live-url-btn:hover {
-  background: #d13a52;
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
 }
