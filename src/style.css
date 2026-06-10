@@ -425,3 +425,31 @@ ol {
 .disable-transition *::after {
   transition: none !important;
 }
+
+/* ===== 骨架屏（Skeleton）工具类 ===== */
+/* 用法：在骨架屏元素的 style 中加入 background-image 覆盖具体渐变色，然后加上 .skeleton-shimmer 类即可 */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-block {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}

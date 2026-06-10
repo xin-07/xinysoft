@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ProjectCard from '../components/project/ProjectCard.vue'
@@ -66,15 +66,17 @@ import { projectsAPI } from '../api'
 const projects = ref([])
 const loading = ref(true)
 const error = ref(false)
+const abortController = new AbortController()
 
 const fetchProjects = async () => {
   loading.value = true
   error.value = false
-  
+
   try {
-    const result = await projectsAPI.getProjects()
+    const result = await projectsAPI.getProjects(undefined, abortController.signal)
     projects.value = result.data.items || []
   } catch (err) {
+    if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch projects:', err)
     error.value = true
   } finally {
@@ -84,6 +86,10 @@ const fetchProjects = async () => {
 
 onMounted(() => {
   fetchProjects()
+})
+
+onUnmounted(() => {
+  abortController.abort()
 })
 </script>
 
@@ -165,7 +171,7 @@ onMounted(() => {
   aspect-ratio: 16 / 9;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-content {
@@ -184,7 +190,7 @@ onMounted(() => {
   border-radius: 9999px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-title {
@@ -194,7 +200,7 @@ onMounted(() => {
   margin-bottom: 0.75rem;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-text {
@@ -204,20 +210,11 @@ onMounted(() => {
   margin-bottom: 0.5rem;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-text--short {
   width: 60%;
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* 错误状态 */

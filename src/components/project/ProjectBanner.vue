@@ -21,6 +21,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { projectBrands } from '../../config/techStackColors'
 
 const props = defineProps({
   project: {
@@ -29,27 +30,16 @@ const props = defineProps({
   }
 })
 
-// 根据项目 id 返回品牌名称
+// 根据项目 id 返回品牌名称（与 ProjectCard 共享同一份配置）
 const brandName = computed(() => {
-  const id = props.project?.id
-  const names = {
-    1: '鲜途智送',
-    2: '昕悦读',
-    3: 'xinysoft'
-  }
-  return names[id] || ''
+  return projectBrands[props.project?.id]?.name || ''
 })
 
-// 根据项目 id 计算渐变色（与 ProjectCard 保持一致）
+// 根据项目 id 计算渐变色（与 ProjectCard 共享同一份配置）
 const gradientStyle = computed(() => {
-  const id = props.project?.id
-  const gradients = {
-    1: 'linear-gradient(135deg, #e94560 0%, #ff6b81 100%)',  // 鲜途智送 — 粉红→浅粉
-    2: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',  // 昕悦读 — 深海蓝→暮光紫
-    3: 'linear-gradient(135deg, #303d7a 0%, #6b4794 100%)'   // xinysoft — 靛蓝→紫罗兰
-  }
+  const brand = projectBrands[props.project?.id]
   return {
-    background: gradients[id] || gradients[1]
+    background: brand?.gradient || projectBrands[1].gradient
   }
 })
 </script>

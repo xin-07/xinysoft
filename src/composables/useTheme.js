@@ -8,6 +8,9 @@ const currentTheme = ref('dark')
 // 系统主题变化监听器引用
 let systemThemeListener = null
 
+// 缓存 MediaQueryList 对象，避免重复创建且确保 removeEventListener 能正确移除
+const systemMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
 // 安全读取 localStorage
 const getStoredTheme = () => {
   try {
@@ -29,7 +32,7 @@ const setStoredTheme = (theme) => {
 
 // 获取系统主题偏好
 const getSystemTheme = () => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return systemMediaQuery.matches ? 'dark' : 'light'
 }
 
 // 应用主题到 DOM
@@ -40,8 +43,7 @@ const applyTheme = (theme) => {
 // 停止监听系统主题变化
 const stopSystemThemeListener = () => {
   if (systemThemeListener) {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    mediaQuery.removeEventListener('change', systemThemeListener)
+    systemMediaQuery.removeEventListener('change', systemThemeListener)
     systemThemeListener = null
   }
 }
@@ -54,8 +56,6 @@ const startSystemThemeListener = () => {
     return
   }
 
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-  
   systemThemeListener = (e) => {
     // 再次检查 localStorage 是否有记录（用户可能已手动设置）
     const currentStored = getStoredTheme()
@@ -66,7 +66,7 @@ const startSystemThemeListener = () => {
     }
   }
 
-  mediaQuery.addEventListener('change', systemThemeListener)
+  systemMediaQuery.addEventListener('change', systemThemeListener)
 }
 
 // 初始化主题

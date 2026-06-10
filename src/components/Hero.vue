@@ -131,7 +131,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { profileAPI } from '../api'
 import ContactModal from './ContactModal.vue'
 
@@ -139,6 +139,7 @@ const profile = ref({})
 const loading = ref(true)
 const showContactModal = ref(false)
 const avatarError = ref(false)
+const abortController = new AbortController()
 
 const defaultTags = ['Vue3', 'FastAPI', 'MySQL', 'OpenClaw', 'HarmonyOS', 'ECharts']
 const tagUrls = {
@@ -161,8 +162,12 @@ const handleTagClick = (tag) => {
 }
 
 const avatarUrl = computed(() => {
-  // 如果头像加载失败或没有头像URL，使用默认头像
-  if (avatarError.value || !profile.value.avatar_url) {
+  // 头像加载失败后显示首字母占位符
+  if (avatarError.value) {
+    return null
+  }
+
+  if (!profile.value.avatar_url) {
     return '/落日.jpg'
   }
 
@@ -189,9 +194,10 @@ const handleAvatarError = () => {
 const fetchProfile = async () => {
   try {
     loading.value = true
-    const data = await profileAPI.getProfile()
+    const data = await profileAPI.getProfile(abortController.signal)
     profile.value = data
   } catch (error) {
+    if (error.name === 'AbortError' || error.name === 'CanceledError') return
     console.error('Failed to fetch profile:', error)
     // 使用默认数据
     profile.value = {
@@ -212,6 +218,10 @@ const fetchProfile = async () => {
 
 onMounted(() => {
   fetchProfile()
+})
+
+onUnmounted(() => {
+  abortController.abort()
 })
 </script>
 
@@ -479,17 +489,8 @@ onMounted(() => {
     rgba(15, 52, 96, 0.3) 75%
   );
   background-size: 200% 100%;
-  animation: skeleton 1.5s ease-in-out infinite;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border: 4px solid rgba(233, 69, 96, 0.2);
-}
-
-@keyframes skeleton {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* 响应式设计 */

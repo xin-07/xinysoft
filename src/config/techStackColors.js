@@ -31,3 +31,26 @@ export const getTagColor = (tech) => {
 export const getTagBackgroundColor = (tech) => {
   return `${getTagColor(tech)}20`
 }
+
+/**
+ * 项目品牌信息配置
+ * 与 API 返回的 project.id 对应，ProjectCard 和 ProjectBanner 共享同一份数据
+ * 新增项目时只需在这里添加一条记录
+ */
+export const projectBrands = {
+  1: {
+    name: '鲜途智送',
+    gradient: 'linear-gradient(135deg, #e94560 0%, #ff6b81 100%)',
+    tint: 'linear-gradient(180deg, rgba(255, 107, 129, 0.06) 0%, transparent 40%)'
+  },
+  2: {
+    name: '昕悦读',
+    gradient: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',
+    tint: 'linear-gradient(180deg, rgba(78, 67, 118, 0.06) 0%, transparent 40%)'
+  },
+  3: {
+    name: 'xinysoft',
+    gradient: 'linear-gradient(135deg, #303d7a 0%, #6b4794 100%)',
+    tint: 'linear-gradient(180deg, rgba(107, 71, 148, 0.06) 0%, transparent 40%)'
+  }
+}

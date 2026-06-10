@@ -85,7 +85,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getTagColor, getTagBackgroundColor } from '../../config/techStackColors'
+import { getTagColor, getTagBackgroundColor, projectBrands } from '../../config/techStackColors'
 
 const props = defineProps({
   project: {
@@ -101,27 +101,16 @@ const props = defineProps({
 
 const router = useRouter()
 
-// 根据项目 id 返回品牌名称（替代原来的首字母）
+// 根据项目 id 返回品牌名称
 const brandName = computed(() => {
-  const id = props.project?.id
-  const names = {
-    1: '鲜途智送',
-    2: '昕悦读',
-    3: 'xinysoft'
-  }
-  return names[id] || ''
+  return projectBrands[props.project?.id]?.name || ''
 })
 
 // 根据项目 id 计算渐变色
 const gradientStyle = computed(() => {
-  const id = props.project?.id
-  const gradients = {
-    1: 'linear-gradient(135deg, #e94560 0%, #ff6b81 100%)',  // 鲜途智送 — 粉红→浅粉
-    2: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',  // 昕悦读 — 深海蓝→暮光紫
-    3: 'linear-gradient(135deg, #303d7a 0%, #6b4794 100%)'   // xinysoft — 靛蓝→紫罗兰
-  }
+  const brand = projectBrands[props.project?.id]
   return {
-    background: gradients[id] || gradients[1]
+    background: brand?.gradient || projectBrands[1].gradient
   }
 })
 
@@ -143,13 +132,8 @@ const displayedTechStack = computed(() => {
 
 // 卡片背景色与封面渐变呼应（末端色以极低透明度延展到内容区顶部）
 const cardContentStyle = computed(() => {
-  const id = props.project?.id
-  const tints = {
-    1: 'linear-gradient(180deg, rgba(255, 107, 129, 0.06) 0%, transparent 40%)',
-    2: 'linear-gradient(180deg, rgba(78, 67, 118, 0.06) 0%, transparent 40%)',
-    3: 'linear-gradient(180deg, rgba(107, 71, 148, 0.06) 0%, transparent 40%)'
-  }
-  return { background: tints[id] || tints[1] }
+  const brand = projectBrands[props.project?.id]
+  return { background: brand?.tint || projectBrands[1].tint }
 })
 
 // 点击卡片跳转到详情页

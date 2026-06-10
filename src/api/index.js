@@ -19,19 +19,19 @@ apiClient.interceptors.response.use(
 
 export const profileAPI = {
   // 获取个人资料
-  getProfile() {
-    return apiClient.get('/api/profile')
+  getProfile(signal) {
+    return apiClient.get('/api/profile', { signal })
   }
 }
 
 export const projectsAPI = {
   // 获取项目列表
-  getProjects(params) {
-    return apiClient.get('/api/projects', { params })
+  getProjects(params, signal) {
+    return apiClient.get('/api/projects', { params, signal })
   },
   // 获取项目详情
-  getProject(id) {
-    return apiClient.get(`/api/projects/${id}`)
+  getProject(id, signal) {
+    return apiClient.get(`/api/projects/${id}`, { signal })
   }
 }
 

@@ -155,7 +155,7 @@ const copyContact = async (text, label) => {
 
 .modal-content {
   background: var(--color-bg-secondary);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(233, 69, 96, 0.2);
   box-shadow: var(--shadow-xl);
   max-width: 500px;
@@ -208,7 +208,7 @@ const copyContact = async (text, label) => {
   padding: 1rem;
   margin-bottom: 0.5rem;
   background: var(--color-surface);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid transparent;
@@ -230,7 +230,7 @@ const copyContact = async (text, label) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   flex-shrink: 0;
 }
 

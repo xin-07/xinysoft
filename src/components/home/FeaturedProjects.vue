@@ -46,23 +46,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectCard from '../project/ProjectCard.vue'
 import { projectsAPI } from '../../api/index.js'
 
 const projects = ref([])
 const loading = ref(true)
 const error = ref(null)
+const abortController = new AbortController()
 
 const fetchFeaturedProjects = async () => {
   try {
     loading.value = true
     error.value = null
 
-    const result = await projectsAPI.getProjects({ featured: true })
+    const result = await projectsAPI.getProjects({ featured: true }, abortController.signal)
     // 响应格式: { code: 200, message: "success", data: { items: [...] } }
     projects.value = result.data?.items || []
   } catch (err) {
+    if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch featured projects:', err)
     error.value = err
   } finally {
@@ -72,6 +74,10 @@ const fetchFeaturedProjects = async () => {
 
 onMounted(() => {
   fetchFeaturedProjects()
+})
+
+onUnmounted(() => {
+  abortController.abort()
 })
 </script>
 
@@ -151,7 +157,7 @@ onMounted(() => {
   height: 20px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
 }
 
@@ -166,7 +172,7 @@ onMounted(() => {
   aspect-ratio: 16 / 10;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .featured-projects__skeleton-content {
@@ -184,7 +190,7 @@ onMounted(() => {
   height: 24px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 9999px;
 }
 
@@ -193,7 +199,7 @@ onMounted(() => {
   height: 24px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 0.75rem;
 }
@@ -203,22 +209,13 @@ onMounted(() => {
   height: 14px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 0.5rem;
 }
 
 .featured-projects__skeleton-text--short {
   width: 60%;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* 响应式设计 */

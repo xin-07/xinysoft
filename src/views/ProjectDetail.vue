@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { projectsAPI } from '../api'
 import { getTagColor, getTagBackgroundColor } from '../config/techStackColors'
@@ -107,6 +107,7 @@ const project = ref(null)
 const loading = ref(true)
 const notFound = ref(false)
 const error = ref(null)
+const abortController = new AbortController()
 
 // 将描述按段落分割
 const descriptionParagraphs = computed(() => {
@@ -122,7 +123,7 @@ const fetchProject = async () => {
   error.value = null
 
   try {
-    const result = await projectsAPI.getProject(id)
+    const result = await projectsAPI.getProject(id, abortController.signal)
     // API 返回 { code, message, data }
     if (result.code === 200 && result.data) {
       project.value = result.data
@@ -130,6 +131,7 @@ const fetchProject = async () => {
       notFound.value = true
     }
   } catch (err) {
+    if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch project:', err)
     if (err.response?.status === 404) {
       notFound.value = true
@@ -143,6 +145,10 @@ const fetchProject = async () => {
 
 onMounted(() => {
   fetchProject()
+})
+
+onUnmounted(() => {
+  abortController.abort()
 })
 </script>
 
