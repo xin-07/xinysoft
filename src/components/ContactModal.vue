@@ -157,7 +157,7 @@ const copyContact = async (text, label) => {
   background: var(--color-bg-secondary);
   border-radius: 16px;
   border: 1px solid rgba(233, 69, 96, 0.2);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-xl);
   max-width: 500px;
   width: 100%;
   position: relative;
@@ -207,7 +207,7 @@ const copyContact = async (text, label) => {
   gap: 1rem;
   padding: 1rem;
   margin-bottom: 0.5rem;
-  background: rgba(15, 52, 96, 0.3);
+  background: var(--color-surface);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
