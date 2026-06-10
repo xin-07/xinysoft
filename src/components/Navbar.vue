@@ -1,15 +1,18 @@
 <template>
   <nav class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
     <div class="navbar-container">
-      <a href="#" class="logo" @click.prevent="scrollToTop">
+      <router-link to="/" class="logo" @click="scrollToTop">
         xiny
-      </a>
+      </router-link>
 
       <!-- PC端导航 -->
       <div class="nav-links">
-        <a href="#hero" class="nav-link" :class="{ active: activeSection === 'hero' }">
+        <router-link to="/" class="nav-link" :class="{ active: isHomeActive }">
           首页
-        </a>
+        </router-link>
+        <router-link to="/projects" class="nav-link" :class="{ active: isProjectsActive }">
+          作品集
+        </router-link>
         <button
           class="theme-toggle"
           @click="toggleTheme"
@@ -30,9 +33,12 @@
 
     <!-- 移动端菜单 -->
     <div class="mobile-menu" :class="{ open: isMenuOpen }">
-      <a href="#hero" class="mobile-nav-link" @click="closeMenu">
+      <router-link to="/" class="mobile-nav-link" @click="closeMenu">
         首页
-      </a>
+      </router-link>
+      <router-link to="/projects" class="mobile-nav-link" @click="closeMenu">
+        作品集
+      </router-link>
       <button
         class="mobile-theme-toggle"
         @click="toggleTheme"
@@ -47,25 +53,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useTheme } from '../composables/useTheme'
 
+const route = useRoute()
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
-const activeSection = ref('hero')
 const { currentTheme, toggleTheme } = useTheme()
+
+// 路由高亮逻辑
+const isHomeActive = computed(() => route.path === '/')
+const isProjectsActive = computed(() => route.path.startsWith('/projects'))
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50
-
-  // 检测当前区域
-  const heroSection = document.getElementById('hero')
-  if (heroSection) {
-    const rect = heroSection.getBoundingClientRect()
-    if (rect.top <= 100 && rect.bottom >= 100) {
-      activeSection.value = 'hero'
-    }
-  }
 }
 
 const scrollToTop = () => {

@@ -24,4 +24,15 @@ export const profileAPI = {
   }
 }
 
+export const projectsAPI = {
+  // 获取项目列表
+  getProjects(params) {
+    return apiClient.get('/api/projects', { params })
+  },
+  // 获取项目详情
+  getProject(id) {
+    return apiClient.get(`/api/projects/${id}`)
+  }
+}
+
 export default apiClient
