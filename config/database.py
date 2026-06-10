@@ -65,3 +65,20 @@ def execute_query(sql: str, params: Optional[tuple] = None) -> Optional[Dict[str
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
             return cursor.fetchone()
+
+
+def execute_query_all(sql: str, params: Optional[tuple] = None) -> list:
+    """
+    执行查询语句，返回所有结果列表
+
+    Args:
+        sql: SQL 查询语句
+        params: 查询参数
+
+    Returns:
+        查询结果列表，如果没有结果返回空列表
+    """
+    with get_db() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, params)
+            return cursor.fetchall()
