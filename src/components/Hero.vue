@@ -140,9 +140,9 @@ const showContactModal = ref(false)
 const avatarError = ref(false)
 
 const defaultTags = ['Vue3', 'FastAPI', 'MySQL', 'OpenClaw', 'HarmonyOS', 'ECharts']
-const defaultEmails = ['2074835619@qq.com', 'xin_y0607@outlook.com', 'xiny0607.23@gmail.com']
+const defaultEmails = ['12074835619@qq.com', 'xin_y0607@outlook.com', 'xiny0607.23@gmail.com', '13886527881@163.com']
 const defaultWechat = 'Yyk-293342'
-const defaultQQ = '2074835619'
+const defaultQQ = '12074835619'
 
 const avatarUrl = computed(() => {
   // 如果头像加载失败或没有头像URL，使用默认头像

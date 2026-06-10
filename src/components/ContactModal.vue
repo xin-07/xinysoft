@@ -22,7 +22,7 @@
                 </svg>
               </div>
               <div class="contact-info">
-                <span class="contact-label">邮箱 {{ index + 1 }}</span>
+                <span class="contact-label">{{ getEmailLabel(email) }}</span>
                 <span class="contact-value">{{ email }}</span>
               </div>
               <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -100,6 +100,25 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const copiedText = ref('')
+
+const getEmailLabel = (email) => {
+  const domain = email.split('@')[1]?.toLowerCase()
+  const labelMap = {
+    'qq.com': 'QQ邮箱',
+    '163.com': '网易邮箱',
+    '126.com': '网易邮箱',
+    'gmail.com': 'Gmail',
+    'outlook.com': 'Outlook邮箱',
+    'hotmail.com': 'Hotmail邮箱',
+    'foxmail.com': 'Foxmail邮箱',
+    'sina.com': '新浪邮箱',
+    'sohu.com': '搜狐邮箱',
+    'yahoo.com': 'Yahoo邮箱',
+    'aliyun.com': '阿里邮箱',
+    'icloud.com': 'iCloud邮箱'
+  }
+  return labelMap[domain] || '邮箱'
+}
 
 const closeModal = () => {
   emit('close')
