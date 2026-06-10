@@ -145,8 +145,9 @@ const defaultWechat = 'Yyk-293342'
 const defaultQQ = '2074835619'
 
 const avatarUrl = computed(() => {
+  // 如果头像加载失败或没有头像URL，使用默认头像
   if (avatarError.value || !profile.value.avatar_url) {
-    return null
+    return '/落日.jpg'
   }
 
   const url = profile.value.avatar_url
@@ -161,8 +162,8 @@ const avatarUrl = computed(() => {
     return `http://127.0.0.1:8000${url}`
   }
 
-  // 其他情况返回 null，显示占位图
-  return null
+  // 其他情况使用默认头像
+  return '/落日.jpg'
 })
 
 const handleAvatarError = () => {
