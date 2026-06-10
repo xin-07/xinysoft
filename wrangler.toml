@@ -1,6 +1,4 @@
-{
-  "name": "xinysoft",
-  "main": "worker.py",
-  "compatibility_date": "2025-12-01",
-  "compatibility_flags": ["python_workers"]
-}
+name = "xinysoft"
+main = "worker.py"
+compatibility_date = "2025-12-01"
+compatibility_flags = ["python_workers"]
