@@ -138,7 +138,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { profileAPI } from '../api'
+import { profileAPI, BASE_URL } from '../api'
 import { getTagColor, getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
 import ContactModal from './ContactModal.vue'
 
@@ -187,7 +187,7 @@ const avatarUrl = computed(() => {
 
   // 如果是后端返回的相对路径（以 /api/avatar 开头），拼接 base URL
   if (url.startsWith('/api/avatar')) {
-    return `http://127.0.0.1:8000${url}`
+    return `${BASE_URL}${url}`
   }
 
   // 其他情况使用默认头像

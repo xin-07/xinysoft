@@ -2,20 +2,20 @@
   <div class="project-detail">
     <!-- 加载状态：骨架屏 -->
     <div v-if="loading" class="loading-skeleton">
-      <div class="skeleton-back"></div>
-      <div class="skeleton-banner"></div>
+      <div class="skeleton-back skeleton-shimmer"></div>
+      <div class="skeleton-banner skeleton-shimmer"></div>
       <div class="skeleton-content">
-        <div class="skeleton-title"></div>
-        <div class="skeleton-subtitle"></div>
+        <div class="skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-subtitle skeleton-shimmer"></div>
         <div class="skeleton-tags">
-          <div class="skeleton-tag"></div>
-          <div class="skeleton-tag"></div>
-          <div class="skeleton-tag"></div>
+          <div class="skeleton-tag skeleton-shimmer"></div>
+          <div class="skeleton-tag skeleton-shimmer"></div>
+          <div class="skeleton-tag skeleton-shimmer"></div>
         </div>
         <div class="skeleton-description">
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-shimmer"></div>
         </div>
       </div>
     </div>
@@ -161,18 +161,12 @@ onUnmounted(() => {
 
 /* 骨架屏样式 */
 .loading-skeleton {
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
 }
 
 .skeleton-back {
   width: 120px;
   height: 24px;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-sm);
   margin-bottom: 2rem;
 }
@@ -180,7 +174,7 @@ onUnmounted(() => {
 .skeleton-banner {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-lg);
   margin-bottom: 2rem;
 }
@@ -192,7 +186,7 @@ onUnmounted(() => {
 .skeleton-title {
   width: 60%;
   height: 36px;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
 }
@@ -200,7 +194,7 @@ onUnmounted(() => {
 .skeleton-subtitle {
   width: 40%;
   height: 20px;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-sm);
   margin-bottom: 1.5rem;
 }
@@ -214,7 +208,7 @@ onUnmounted(() => {
 .skeleton-tag {
   width: 80px;
   height: 28px;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-sm);
 }
 
@@ -227,7 +221,7 @@ onUnmounted(() => {
 .skeleton-line {
   width: 100%;
   height: 16px;
-  background: var(--color-surface);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   border-radius: var(--radius-sm);
 }
 

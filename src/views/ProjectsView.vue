@@ -29,7 +29,7 @@
 
         <!-- 错误状态 -->
         <div v-else-if="error" class="projects-error">
-          <p class="error-message">加载失败，请稍后重试</p>
+          <p class="error-message">{{ error }}</p>
           <button class="retry-btn" @click="fetchProjects">
             重试
           </button>
@@ -64,17 +64,16 @@ import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ProjectCard from '../components/project/ProjectCard.vue'
 import { projectsAPI } from '../api'
-
-const BORDER_EFFECTS = ['fade-glow', 'particle', 'nebula']
+import { BORDER_EFFECTS } from '../config/constants'
 
 const projects = ref([])
 const loading = ref(true)
-const error = ref(false)
+const error = ref(null)
 const abortController = new AbortController()
 
 const fetchProjects = async () => {
   loading.value = true
-  error.value = false
+  error.value = null
 
   try {
     const result = await projectsAPI.getProjects(undefined, abortController.signal)
@@ -82,7 +81,7 @@ const fetchProjects = async () => {
   } catch (err) {
     if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch projects:', err)
-    error.value = true
+    error.value = err.message || '加载失败，请稍后重试'
   } finally {
     loading.value = false
   }

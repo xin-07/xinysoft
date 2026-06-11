@@ -44,16 +44,20 @@
     </div>
   </section>
 
-  <!-- 错误状态和空状态：隐藏该区域（不渲染任何内容） -->
+  <!-- 错误状态 -->
+  <section v-else-if="error" class="featured-projects" aria-live="polite">
+    <div class="featured-projects__error">
+      <p class="featured-projects__error-message">{{ error }}</p>
+      <button class="featured-projects__retry-btn" @click="fetchFeaturedProjects">重试</button>
+    </div>
+  </section>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectCard from '../project/ProjectCard.vue'
 import { projectsAPI } from '../../api/index.js'
-
-// 边框特效循环分配
-const BORDER_EFFECTS = ['fade-glow', 'particle', 'nebula']
+import { BORDER_EFFECTS } from '../../config/constants.js'
 
 const projects = ref([])
 const loading = ref(true)
@@ -71,7 +75,7 @@ const fetchFeaturedProjects = async () => {
   } catch (err) {
     if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch featured projects:', err)
-    error.value = err
+    error.value = err.message || '加载失败，请稍后重试'
   } finally {
     loading.value = false
   }
@@ -219,6 +223,39 @@ onUnmounted(() => {
 
 .featured-projects__skeleton-text--short {
   width: 60%;
+}
+
+/* 错误状态 */
+.featured-projects__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.featured-projects__error-message {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 1.5rem 0;
+}
+
+.featured-projects__retry-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.featured-projects__retry-btn:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-2px);
 }
 
 /* 响应式设计 */
