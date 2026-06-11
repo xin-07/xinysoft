@@ -7,7 +7,7 @@
 | 项目 | 说明 |
 |------|------|
 | **项目名称** | xinysoft 个人作品集 API |
-| **版本** | 1.0.0 |
+| **版本** | 1.2.0 |
 | **Base URL** | `http://127.0.0.1:8000` |
 | **API 文档** | `http://127.0.0.1:8000/docs` (Swagger UI) |
 | **字符编码** | UTF-8 (utf8mb4_unicode_ci) |
@@ -21,6 +21,7 @@
 | Hello 测试接口 | GET | `/hello/{name}` | 测试动态路由功能 |
 | 获取个人资料 | GET | `/api/profile` | 获取个人资料信息 |
 | 获取头像图片 | GET | `/api/avatar/{file_path:path}` | 获取头像图片资源 |
+| 获取项目图片文件 | GET | `/api/files/{file_path:path}` | 获取项目封面图、截图等图片资源 |
 | 获取项目列表 | GET | `/api/projects` | 获取项目作品集列表（支持分页和筛选） |
 | 获取项目详情 | GET | `/api/projects/{id}` | 获取单个项目的详细信息 |
 
@@ -294,7 +295,78 @@
 
 ---
 
-### 3.5 获取项目列表
+### 3.5 获取项目图片文件
+
+将本地项目图片文件路径转换为可访问的 URL，供前端加载封面图和截图。
+
+**基本信息**
+
+| 项目 | 说明 |
+|------|------|
+| **接口路径** | `GET /api/files/{file_path:path}` |
+| **接口说明** | 将本地项目图片文件路径转换为可访问的 URL，供前端加载封面图和截图 |
+| **认证方式** | 无需认证 |
+| **响应类型** | image/* |
+
+**请求参数**
+
+| 参数名 | 类型 | 必填 | 位置 | 说明 |
+|--------|------|------|------|------|
+| file_path | string | 是 | Path | 本地文件路径（URL 编码后的） |
+
+**路径格式说明**
+
+- Windows 路径需要转换为 URL 格式：`D:\Project\web\xinysoft_Vite\public\鲜途智送.png` → `D:/Project/web/xinysoft_Vite/public/鲜途智送.png`
+- 特殊字符（如中文）会自动进行 URL 编码
+- 示例：`/api/files/D:/Project/web/xinysoft_Vite/public/%E9%B2%9C%E9%80%94%E6%99%BA%E9%80%81.png`
+
+**响应示例**
+
+**成功响应 (200)**
+
+返回图片文件，Content-Type 根据图片类型自动设置：
+
+| 文件扩展名 | Content-Type |
+|-----------|--------------|
+| .jpg / .jpeg | image/jpeg |
+| .png | image/png |
+| .gif | image/gif |
+| .webp | image/webp |
+
+**错误响应**
+
+**文件不存在 (404)**
+
+```json
+{
+  "detail": "文件不存在"
+}
+```
+
+**无权访问 (403)**
+
+```json
+{
+  "detail": "无权访问此文件"
+}
+```
+
+**安全限制**
+
+- 只允许访问特定目录（当前配置：`D:\Project\web\xinysoft_Vite\public`、`D:\File\photos`）
+- 防止路径遍历攻击
+- 自动验证文件路径是否在允许范围内
+
+**使用示例**
+
+前端可以直接使用返回的 URL：
+
+```html
+<img src="/api/files/D:/Project/web/xinysoft_Vite/public/%E9%B2%9C%E9%80%94%E6%99%BA%E9%80%81.png" alt="鲜途智送" />
+```
+
+---
+### 3.6 获取项目列表
 
 获取项目作品集列表，支持分页和筛选功能。
 
@@ -330,8 +402,8 @@
 | items[].subtitle | string | 项目副标题 |
 | items[].description | string | 项目描述 |
 | items[].tech_stack | array | 技术栈数组 |
-| items[].cover_url | string | 封面图URL |
-| items[].screenshots | array | 截图列表 |
+| items[].cover_url | string | 封面图 URL（已自动转换为 /api/files/ 可访问链接） |
+| items[].screenshots | array | 截图 URL 列表（已自动转换为 /api/files/ 可访问链接） |
 | items[].live_url | string | 线上地址 |
 | items[].repo_url | string | 源码地址 |
 | items[].is_featured | bool | 是否精选 |
@@ -343,6 +415,12 @@
 
 - 按 `sort_order` 降序排列（数值越大越靠前）
 - 只返回 `status='published'` 的项目
+
+**图片 URL 说明**
+
+- `cover_url` 和 `screenshots` 中返回的是可直接访问的 `/api/files/` 格式 URL
+- 数据库存储原始本地路径（如 `D:\Project\web\...\xxx.png`），接口层自动转换
+- 前端可以直接使用：`<img :src="item.cover_url" />`
 
 **响应示例**
 
@@ -364,7 +442,11 @@
         "description": "基于 Vue 3 的智能路径优化与物流配送管理系统...",
         "tech_stack": ["Vue 3", "Vite", "Three.js", "天地图 API", "ECharts", "Flask", "MySQL", "Redis", "蚂蚁群+粒子群混合算法"],
         "cover_url": null,
-        "screenshots": null,
+        "screenshots": [
+          "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-首页.png",
+          "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-主页.png",
+          "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-底部订单管理.png"
+        ],
         "live_url": "https://smile050417.site/",
         "repo_url": null,
         "is_featured": true,
@@ -432,7 +514,7 @@
 
 ---
 
-### 3.6 获取项目详情
+### 3.7 获取项目详情
 
 获取单个项目的详细信息。
 
@@ -462,8 +544,8 @@
 | data.subtitle | string | 项目副标题 |
 | data.description | string | 项目描述 |
 | data.tech_stack | array | 技术栈数组 |
-| data.cover_url | string | 封面图URL |
-| data.screenshots | array | 截图列表 |
+| data.cover_url | string | 封面图 URL（已自动转换为 /api/files/ 可访问链接） |
+| data.screenshots | array | 截图 URL 列表（已自动转换为 /api/files/ 可访问链接） |
 | data.live_url | string | 线上地址 |
 | data.repo_url | string | 源码地址 |
 | data.is_featured | bool | 是否精选 |
@@ -486,7 +568,11 @@
     "description": "基于 Vue 3 的智能路径优化与物流配送管理系统，集成天地图 API，提供路径规划、团队协作、仓库管理、大屏数据可视化等功能。后端采用 Flask 框架，使用混合蚁群-粒子群优化算法解决车辆路径问题(VRP)，实现高效的配送路线规划。",
     "tech_stack": ["Vue 3", "Vite", "Three.js", "天地图 API", "ECharts", "Flask", "MySQL", "Redis", "蚂蚁群+粒子群混合算法"],
     "cover_url": null,
-    "screenshots": null,
+    "screenshots": [
+      "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-首页.png",
+      "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-主页.png",
+      "/api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送-底部订单管理.png"
+    ],
     "live_url": "https://smile050417.site/",
     "repo_url": null,
     "is_featured": true,
@@ -530,6 +616,9 @@ curl http://127.0.0.1:8000/api/profile
 # 测试头像接口
 curl http://127.0.0.1:8000/api/avatar/D:/File/photos/%E8%90%BD%E6%97%A5.jpg
 
+# 测试项目图片文件接口
+curl http://127.0.0.1:8000/api/files/D:/Project/web/xinysoft_Vite/public/%E9%B2%9C%E9%80%94%E6%99%BA%E9%80%81.png
+
 # 测试项目列表接口
 curl http://127.0.0.1:8000/api/projects
 
@@ -555,3 +644,4 @@ curl http://127.0.0.1:8000/api/projects/1
 |------|------|----------|
 | 1.0.0 | 2026-06-09 | 初始版本发布 |
 | 1.1.0 | 2026-06-10 | 新增项目作品集 API：GET /api/projects（项目列表）、GET /api/projects/{id}（项目详情） |
+| 1.2.0 | 2026-06-11 | 新增通用文件服务 API：GET /api/files/{file_path}；项目列表/详情接口自动转换 cover_url 和 screenshots 为可访问 URL |
