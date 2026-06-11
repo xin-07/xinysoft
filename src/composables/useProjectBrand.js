@@ -22,7 +22,7 @@ export function useProjectBrand(projectId) {
 
   const cardContentStyle = computed(() => {
     const brand = projectBrands[projectId.value]
-    return { background: brand?.tint || projectBrands[1].tint }
+    return { background: brand?.tint || 'transparent' }
   })
 
   return {

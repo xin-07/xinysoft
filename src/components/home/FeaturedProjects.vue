@@ -24,21 +24,21 @@
   <section v-else-if="loading" class="featured-projects" aria-busy="true" aria-live="polite">
     <div class="featured-projects__header">
       <h2 class="featured-projects__title">精选项目</h2>
-      <div class="featured-projects__skeleton-link"></div>
+      <div class="featured-projects__skeleton-link skeleton-shimmer"></div>
     </div>
 
     <div class="featured-projects__grid">
       <div v-for="i in 3" :key="i" class="featured-projects__skeleton-card">
-        <div class="featured-projects__skeleton-cover"></div>
+        <div class="featured-projects__skeleton-cover skeleton-shimmer"></div>
         <div class="featured-projects__skeleton-content">
           <div class="featured-projects__skeleton-tags">
-            <div class="featured-projects__skeleton-tag"></div>
-            <div class="featured-projects__skeleton-tag"></div>
-            <div class="featured-projects__skeleton-tag"></div>
+            <div class="featured-projects__skeleton-tag skeleton-shimmer"></div>
+            <div class="featured-projects__skeleton-tag skeleton-shimmer"></div>
+            <div class="featured-projects__skeleton-tag skeleton-shimmer"></div>
           </div>
-          <div class="featured-projects__skeleton-title"></div>
-          <div class="featured-projects__skeleton-text"></div>
-          <div class="featured-projects__skeleton-text featured-projects__skeleton-text--short"></div>
+          <div class="featured-projects__skeleton-title skeleton-shimmer"></div>
+          <div class="featured-projects__skeleton-text skeleton-shimmer"></div>
+          <div class="featured-projects__skeleton-text featured-projects__skeleton-text--short skeleton-shimmer"></div>
         </div>
       </div>
     </div>
@@ -169,8 +169,6 @@ onUnmounted(() => {
   width: 80px;
   height: 20px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
 }
 
@@ -184,8 +182,6 @@ onUnmounted(() => {
 .featured-projects__skeleton-cover {
   aspect-ratio: 16 / 10;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .featured-projects__skeleton-content {
@@ -202,8 +198,6 @@ onUnmounted(() => {
   width: 60px;
   height: 24px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 9999px;
 }
 
@@ -211,8 +205,6 @@ onUnmounted(() => {
   width: 70%;
   height: 24px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 0.75rem;
 }
@@ -221,8 +213,6 @@ onUnmounted(() => {
   width: 100%;
   height: 14px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
   border-radius: 4px;
   margin-bottom: 0.5rem;
 }

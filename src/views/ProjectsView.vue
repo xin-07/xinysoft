@@ -13,16 +13,16 @@
         <!-- 加载状态 -->
         <div v-if="loading" class="projects-grid" aria-busy="true" aria-live="polite">
           <div v-for="i in 3" :key="i" class="skeleton-card">
-            <div class="skeleton-cover"></div>
+            <div class="skeleton-cover skeleton-shimmer"></div>
             <div class="skeleton-content">
               <div class="skeleton-tags">
-                <div class="skeleton-tag"></div>
-                <div class="skeleton-tag"></div>
-                <div class="skeleton-tag"></div>
+                <div class="skeleton-tag skeleton-shimmer"></div>
+                <div class="skeleton-tag skeleton-shimmer"></div>
+                <div class="skeleton-tag skeleton-shimmer"></div>
               </div>
-              <div class="skeleton-title"></div>
-              <div class="skeleton-text"></div>
-              <div class="skeleton-text skeleton-text--short"></div>
+              <div class="skeleton-title skeleton-shimmer"></div>
+              <div class="skeleton-text skeleton-shimmer"></div>
+              <div class="skeleton-text skeleton-text--short skeleton-shimmer"></div>
             </div>
           </div>
         </div>
@@ -171,8 +171,6 @@ onUnmounted(() => {
 .skeleton-cover {
   aspect-ratio: 16 / 10;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-content {
@@ -190,8 +188,6 @@ onUnmounted(() => {
   height: 24px;
   border-radius: 9999px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-title {
@@ -200,8 +196,6 @@ onUnmounted(() => {
   border-radius: 4px;
   margin-bottom: 0.75rem;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-text {
@@ -210,8 +204,6 @@ onUnmounted(() => {
   border-radius: 4px;
   margin-bottom: 0.5rem;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
 }
 
 .skeleton-text--short {

@@ -20,22 +20,12 @@
           class="project-card__image"
           loading="lazy"
         />
-        <div
+        <ProjectPlaceholder
           v-else
-          class="project-card__placeholder"
-          :style="gradientStyle"
-        >
-          <!-- Layer 3: Bottom dark gradient fade -->
-          <div class="placeholder-fade" aria-hidden="true"></div>
-
-          <!-- Layer 5: Floating geometric decorations -->
-          <div class="placeholder-decor placeholder-decor--circle" aria-hidden="true"></div>
-          <div class="placeholder-decor placeholder-decor--ring" aria-hidden="true"></div>
-          <div class="placeholder-decor placeholder-decor--dot" aria-hidden="true"></div>
-
-          <!-- Layer 6: Brand name -->
-          <span class="project-card__letter">{{ brandName }}</span>
-        </div>
+          :brand-name="brandName"
+          :gradient-style="gradientStyle"
+          variant="card"
+        />
       </div>
 
       <!-- 内容区域 -->
@@ -98,6 +88,7 @@ import { Icon } from '@iconify/vue'
 import { getTagColor, getTagTextColor, getTagBackgroundColor, projectBrands } from '../../config/techStackColors'
 import { useProjectBrand } from '../../composables/useProjectBrand'
 import ParticleBorder from './ParticleBorder.vue'
+import ProjectPlaceholder from './ProjectPlaceholder.vue'
 
 const props = defineProps({
   project: {
@@ -263,174 +254,6 @@ const openLiveUrl = () => {
 }
 
 /* ============================================================
-   Placeholder — 6-Layer Visual Effects
-   ============================================================ */
-
-/* Layer 1: Brand gradient background */
-.project-card__placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
-  position: relative;
-  overflow: hidden;
-
-  /* Brand gradient via CSS variable injected by composable */
-  background: var(--card-brand-gradient, linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%));
-  background-size: 250% 250%;
-  animation: gradientShift 6s ease-in-out infinite alternate;
-}
-
-/* Layer 2: Geometric grid texture (disabled) */
-/* Removed per design preference */
-
-/* Layer 4: Diagonal light sweep (::after) */
-.project-card__placeholder::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.12) 42%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.12) 58%,
-    transparent 65%
-  );
-  animation: lightSweep 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.project-card:hover .project-card__placeholder::after {
-  animation-duration: 2s;
-  background: linear-gradient(
-    105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.2) 42%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.2) 58%,
-    transparent 65%
-  );
-}
-
-/* Layer 3: Bottom dark gradient fade */
-.placeholder-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 35%;
-  background: linear-gradient(
-    to top,
-    var(--color-surface, #0f3460) 0%,
-    rgba(15, 52, 96, 0.25) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Layer 5: Floating geometric decorations */
-.placeholder-decor {
-  position: absolute;
-  pointer-events: none;
-  z-index: 4;
-  opacity: 0.7;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.project-card:hover .placeholder-decor {
-  opacity: 1;
-}
-
-/* Large circle — top right */
-.placeholder-decor--circle {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.06);
-  border: 2px solid rgba(0, 0, 0, 0.08);
-  top: -28px;
-  right: -18px;
-  animation: floatCircle 7s ease-in-out infinite alternate;
-}
-
-/* Ring — bottom left */
-.placeholder-decor--ring {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 3px solid rgba(0, 0, 0, 0.12);
-  bottom: 18px;
-  left: 14px;
-  animation: floatRing 5.5s ease-in-out infinite alternate-reverse;
-}
-
-/* Small dot — middle right */
-.placeholder-decor--dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.15);
-  top: 38%;
-  right: 22%;
-  animation: floatDot 3.5s ease-in-out infinite alternate;
-  box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Layer 6: First letter */
-.project-card__letter {
-  position: relative;
-  z-index: 5;
-  font-size: 2rem;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.6),
-    0 2px 8px rgba(0, 0, 0, 0.15);
-  user-select: none;
-  letter-spacing: 0.1em;
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
-}
-
-/* Letter glow behind */
-.project-card__letter::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 90px;
-  height: 90px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0.06) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: -1;
-  transition: width 0.3s ease, height 0.3s ease;
-}
-
-.project-card:hover .project-card__letter {
-  transform: scale(1.2);
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.8),
-    0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-.project-card:hover .project-card__letter::after {
-  width: 120px;
-  height: 120px;
-}
-
-/* ============================================================
    Content Area
    ============================================================ */
 
@@ -550,36 +373,6 @@ const openLiveUrl = () => {
 }
 
 /* ============================================================
-   Animations
-   ============================================================ */
-
-@keyframes floatCircle {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-6px, 8px) scale(1.08); }
-}
-
-@keyframes floatRing {
-  0%   { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(5px, -7px) rotate(45deg); }
-}
-
-@keyframes floatDot {
-  0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
-  100% { transform: translate(-3px, -5px) scale(1.3); opacity: 1; }
-}
-
-@keyframes gradientShift {
-  0%   { background-position: 0% 0%; }
-  50%  { background-position: 100% 100%; }
-  100% { background-position: 0% 100%; }
-}
-
-@keyframes lightSweep {
-  0%   { transform: translateX(-100%) rotate(15deg); }
-  100% { transform: translateX(100%) rotate(15deg); }
-}
-
-/* ============================================================
    Responsive Design
    ============================================================ */
 
@@ -599,10 +392,6 @@ const openLiveUrl = () => {
   .project-card__btn {
     padding: 0.4rem 0.8rem;
     font-size: 0.8125rem;
-  }
-
-  .project-card__letter {
-    font-size: 1.5rem;
   }
 }
 
@@ -628,25 +417,6 @@ const openLiveUrl = () => {
   .project-card__btn {
     transition: none;
     animation: none;
-  }
-
-  .project-card__placeholder {
-    animation: none;
-  }
-
-  .project-card__placeholder::after {
-    animation: none;
-    display: none;
-  }
-
-  .placeholder-decor {
-    animation: none;
-    transition: none;
-  }
-
-  .project-card__letter,
-  .project-card__letter::after {
-    transition: none;
   }
 }
 

@@ -110,7 +110,7 @@
       <!-- 右侧头像区 -->
       <div class="hero-avatar">
         <div class="avatar-wrapper" :aria-busy="loading" aria-live="polite">
-          <div v-if="loading" class="avatar-skeleton"></div>
+          <div v-if="loading" class="avatar-skeleton skeleton-shimmer"></div>
           <img
             v-else-if="avatarUrl"
             :src="avatarUrl"
@@ -530,8 +530,6 @@ onUnmounted(() => {
     rgba(15, 52, 96, 0.5) 50%,
     rgba(15, 52, 96, 0.3) 75%
   );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border: 4px solid rgba(233, 69, 96, 0.2);
 }
 
