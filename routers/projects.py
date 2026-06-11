@@ -5,6 +5,7 @@ import json
 import logging
 from fastapi import APIRouter, Query
 from typing import Any, Optional
+from urllib.parse import quote
 from config.database import execute_query, execute_query_all
 from models.project import ProjectResponse, ProjectListResponse
 from models.common import ApiResponse
@@ -32,6 +33,40 @@ def parse_json_field(value: str) -> Any:
         return json.loads(value)
     except (json.JSONDecodeError, TypeError):
         return None
+
+
+def convert_file_url(file_path: str) -> str:
+    """
+    将本地文件路径转换为可访问的 /api/files/ URL
+
+    Args:
+        file_path: 本地文件路径（如 D:\\Project\\web\\xinysoft_Vite\\public\\鲜途智送.png）
+
+    Returns:
+        str: 可访问的 URL（如 /api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送.png）
+    """
+    if not file_path:
+        return None
+
+    # 将 Windows 路径分隔符转换为 URL 格式
+    url_path = file_path.replace('\\', '/')
+    encoded_path = quote(url_path, safe='/')
+    return f"/api/files/{encoded_path}"
+
+
+def convert_file_urls(paths: list) -> list:
+    """
+    批量转换本地文件路径为 /api/files/ URL
+
+    Args:
+        paths: 本地文件路径列表
+
+    Returns:
+        list: URL 列表
+    """
+    if not paths:
+        return None
+    return [convert_file_url(p) for p in paths]
 
 
 @router.get("/projects", response_model=ApiResponse[ProjectListResponse], summary="获取项目列表")
@@ -91,6 +126,8 @@ async def get_projects(
         for project in projects:
             project['tech_stack'] = parse_json_field(project.get('tech_stack'))
             project['screenshots'] = parse_json_field(project.get('screenshots'))
+            project['cover_url'] = convert_file_url(project.get('cover_url'))
+            project['screenshots'] = convert_file_urls(project.get('screenshots'))
             items.append(project)
 
         return {
@@ -153,6 +190,8 @@ async def get_project(project_id: int):
         # 解析 JSON 字段
         project['tech_stack'] = parse_json_field(project.get('tech_stack'))
         project['screenshots'] = parse_json_field(project.get('screenshots'))
+        project['cover_url'] = convert_file_url(project.get('cover_url'))
+        project['screenshots'] = convert_file_urls(project.get('screenshots'))
 
         return {
             "code": 200,

@@ -5,7 +5,7 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from routers import profile, avatar, projects
+from routers import profile, avatar, projects, files
 
 # 配置日志
 logging.basicConfig(
@@ -60,6 +60,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(profile.router)
 app.include_router(avatar.router)
 app.include_router(projects.router)
+app.include_router(files.router)
 
 
 @app.get("/", summary="根路径测试")
