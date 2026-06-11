@@ -11,7 +11,7 @@
  Target Server Version : 80409 (8.4.9)
  File Encoding         : 65001
 
- Date: 10/06/2026 18:51:17
+ Date: 11/06/2026 18:36:39
 */
 
 SET NAMES utf8mb4;
@@ -68,8 +68,8 @@ CREATE TABLE `projects`  (
 -- ----------------------------
 -- Records of projects
 -- ----------------------------
-INSERT INTO `projects` VALUES (1, '智能路径规划与物流配送系统', '鲜途智送 · 物流配送智能管理平台', '基于 Vue 3 的智能路径优化与物流配送管理系统，集成天地图 API，提供路径规划、团队协作、仓库管理、大屏数据可视化等功能。后端采用 Flask 框架，使用混合蚁群-粒子群优化算法解决车辆路径问题(VRP)，实现高效的配送路线规划。', '[\"Vue 3\", \"Vite\", \"Three.js\", \"天地图 API\", \"ECharts\", \"Flask\", \"MySQL\", \"Redis\", \"蚂蚁群+粒子群混合算法\"]', NULL, NULL, 'https://smile050417.site/', NULL, 1, 3, 'published', '2026-06-10 18:50:40', '2026-06-10 18:50:40');
-INSERT INTO `projects` VALUES (2, '昕悦读 分布式小说阅读系统', 'HarmonyOS 原生小说阅读应用', '基于 HarmonyOS（鸿蒙）平台开发的小说阅读应用，采用 Spring Boot 微服务架构与 MySQL 数据库，前端使用 ArkTS + ArkUI 构建原生鸿蒙界面。支持多本书籍在线阅读、用户登录注册、阅读进度同步等功能。', '[\"Spring Boot\", \"MySQL\", \"MyBatis\", \"ArkTS\", \"ArkUI\", \"HarmonyOS\"]', NULL, NULL, NULL, NULL, 1, 2, 'published', '2026-06-10 18:50:40', '2026-06-10 18:50:40');
+INSERT INTO `projects` VALUES (1, '智能路径规划与物流配送系统', '鲜途智送 · 物流配送智能管理平台', '基于 Vue 3 的智能路径优化与物流配送管理系统，集成天地图 API，提供路径规划、团队协作、仓库管理、大屏数据可视化等功能。后端采用 Flask 框架，使用混合蚁群-粒子群优化算法解决车辆路径问题(VRP)，实现高效的配送路线规划。', '[\"Vue 3\", \"Vite\", \"Three.js\", \"天地图 API\", \"ECharts\", \"Flask\", \"MySQL\", \"Redis\", \"蚂蚁群+粒子群混合算法\"]', NULL, '[\"D:/Project/web/xinysoft_Vite/public/鲜途智送-首页.png\", \"D:/Project/web/xinysoft_Vite/public/鲜途智送-主页.png\", \"D:/Project/web/xinysoft_Vite/public/鲜途智送-底部订单管理.png\"]', 'https://smile050417.site/', NULL, 1, 3, 'published', '2026-06-10 18:50:40', '2026-06-11 18:36:24');
+INSERT INTO `projects` VALUES (2, '昕悦读 分布式小说阅读系统', 'HarmonyOS 原生小说阅读应用', '基于 HarmonyOS（鸿蒙）平台开发的小说阅读应用，采用 Spring Boot 微服务架构与 MySQL 数据库，前端使用 ArkTS + ArkUI 构建原生鸿蒙界面。支持多本书籍在线阅读、用户登录注册、阅读进度同步等功能。', '[\"Spring Boot\", \"MySQL\", \"MyBatis\", \"ArkTS\", \"ArkUI\", \"HarmonyOS\"]', NULL, NULL, NULL, NULL, 0, 2, 'published', '2026-06-10 18:50:40', '2026-06-11 11:10:11');
 INSERT INTO `projects` VALUES (3, 'xinysoft 个人作品集', 'Vue 3 + FastAPI 全栈个人网站', '基于 Vue 3 + Vite 构建的个人作品集网站，后端使用 FastAPI + MySQL 提供 API 服务。包含个人资料展示、项目作品集、主题切换、响应式设计等功能，用于展示个人品牌与技术能力。', '[\"Vue 3\", \"Vite\", \"Vue Router\", \"FastAPI\", \"MySQL\", \"PyMySQL\"]', NULL, NULL, NULL, NULL, 1, 1, 'published', '2026-06-10 18:50:40', '2026-06-10 18:50:40');
 
 SET FOREIGN_KEY_CHECKS = 1;
