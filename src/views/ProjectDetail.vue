@@ -51,6 +51,13 @@
       <!-- Banner -->
       <ProjectBanner :project="project" />
 
+      <!-- 项目截图 -->
+      <ProjectScreenshots
+        v-if="project?.screenshots?.length"
+        :screenshots="project.screenshots"
+        :project-title="project.title"
+      />
+
       <!-- 项目信息 -->
       <div class="project-info">
         <h1 class="project-title">{{ project.title }}</h1>
@@ -101,6 +108,7 @@ import { useRoute } from 'vue-router'
 import { projectsAPI } from '../api'
 import { getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
 import ProjectBanner from '../components/project/ProjectBanner.vue'
+import ProjectScreenshots from '../components/project/ProjectScreenshots.vue'
 
 const route = useRoute()
 const project = ref(null)
