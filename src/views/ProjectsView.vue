@@ -11,7 +11,7 @@
         </header>
 
         <!-- 加载状态 -->
-        <div v-if="loading" class="projects-grid">
+        <div v-if="loading" class="projects-grid" aria-busy="true" aria-live="polite">
           <div v-for="i in 3" :key="i" class="skeleton-card">
             <div class="skeleton-cover"></div>
             <div class="skeleton-content">
@@ -43,10 +43,12 @@
         <!-- 项目列表 -->
         <div v-else class="projects-grid">
           <ProjectCard
-            v-for="project in projects"
+            v-for="(project, index) in projects"
             :key="project.id"
             :project="project"
+            :border-effect="BORDER_EFFECTS[index % BORDER_EFFECTS.length]"
             variant="list"
+            :style="{ '--card-index': index }"
           />
         </div>
       </div>
@@ -62,6 +64,8 @@ import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import ProjectCard from '../components/project/ProjectCard.vue'
 import { projectsAPI } from '../api'
+
+const BORDER_EFFECTS = ['fade-glow', 'particle', 'nebula']
 
 const projects = ref([])
 const loading = ref(true)
@@ -142,11 +146,8 @@ onUnmounted(() => {
 /* 卡片入场动画 */
 .projects-grid > * {
   animation: cardEntrance 0.4s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s + 0.05s);
 }
-
-.projects-grid > *:nth-child(1) { animation-delay: 0.05s; }
-.projects-grid > *:nth-child(2) { animation-delay: 0.15s; }
-.projects-grid > *:nth-child(3) { animation-delay: 0.25s; }
 
 @keyframes cardEntrance {
   from {
@@ -168,7 +169,7 @@ onUnmounted(() => {
 }
 
 .skeleton-cover {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s infinite;
@@ -242,12 +243,23 @@ onUnmounted(() => {
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .retry-btn:hover {
   background: var(--color-accent-hover);
   transform: translateY(-2px);
+}
+
+/* 焦点样式 */
+.retry-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.retry-btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* 空状态 */
@@ -285,13 +297,24 @@ onUnmounted(() => {
     font-size: 1rem;
   }
 
+  .projects-header {
+    margin-bottom: 2rem;
+  }
+}
+
+/* 600px断点 - 保持两列布局 */
+@media (min-width: 600px) and (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* 600px以下 - 单列布局 */
+@media (max-width: 599px) {
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-
-  .projects-header {
-    margin-bottom: 2rem;
   }
 }
 </style>

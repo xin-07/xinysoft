@@ -24,7 +24,13 @@
               v-for="(tag, index) in (profile.tech_tags || defaultTags)"
               :key="index"
               class="tech-tag"
-              :style="{ animationDelay: `${index * 0.1}s` }"
+              :style="{
+                animationDelay: `${index * 0.1}s`,
+                '--tag-color': getTagColor(tag),
+                backgroundColor: getTagBackgroundColor(tag),
+                color: getTagTextColor(),
+                borderColor: `${getTagColor(tag)}40`
+              }"
               @click="handleTagClick(tag)"
             >
               {{ tag }}
@@ -103,7 +109,7 @@
 
       <!-- 右侧头像区 -->
       <div class="hero-avatar">
-        <div class="avatar-wrapper">
+        <div class="avatar-wrapper" :aria-busy="loading" aria-live="polite">
           <div v-if="loading" class="avatar-skeleton"></div>
           <img
             v-else-if="avatarUrl"
@@ -133,6 +139,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { profileAPI } from '../api'
+import { getTagColor, getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
 import ContactModal from './ContactModal.vue'
 
 const profile = ref({})
@@ -332,13 +339,11 @@ onUnmounted(() => {
 .tech-tag {
   display: inline-block;
   padding: 0.5rem 1.25rem;
-  background: rgba(233, 69, 96, 0.1);
-  color: var(--color-accent);
   border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 500;
-  border: 1px solid rgba(233, 69, 96, 0.2);
-  transition: all 0.3s ease;
+  border: 1px solid;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   animation: fadeInUp 0.6s ease-out backwards;
   cursor: pointer;
 }
@@ -355,9 +360,20 @@ onUnmounted(() => {
 }
 
 .tech-tag:hover {
-  background: rgba(233, 69, 96, 0.2);
+  background: color-mix(in srgb, var(--tag-color) 30%, transparent);
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--tag-color) 40%, transparent);
+}
+
+/* 焦点样式 */
+.tech-tag:focus-visible {
+  outline: 2px solid var(--tag-color);
+  outline-offset: 2px;
+}
+
+.tech-tag:focus {
+  outline: 2px solid var(--tag-color);
+  outline-offset: 2px;
 }
 
 .cta-button {
@@ -372,7 +388,7 @@ onUnmounted(() => {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
   width: fit-content;
 }
@@ -385,6 +401,17 @@ onUnmounted(() => {
 
 .cta-button:active {
   transform: translateY(0);
+}
+
+/* 焦点样式 */
+.cta-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.cta-button:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .social-links {
@@ -404,7 +431,7 @@ onUnmounted(() => {
   border-radius: 12px;
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
@@ -416,14 +443,29 @@ onUnmounted(() => {
   box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
 }
 
-.social-link.wechat:hover {
+/* 焦点样式 */
+.social-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.social-link:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.social-link.wechat:hover,
+.social-link.wechat:focus-visible,
+.social-link.wechat:focus {
   background: rgba(7, 193, 96, 0.1);
   border-color: #07c160;
   color: #07c160;
   box-shadow: 0 4px 15px rgba(7, 193, 96, 0.3);
 }
 
-.social-link.qq:hover {
+.social-link.qq:hover,
+.social-link.qq:focus-visible,
+.social-link.qq:focus {
   background: rgba(18, 183, 245, 0.1);
   border-color: #12b7f5;
   color: #12b7f5;
@@ -571,6 +613,21 @@ onUnmounted(() => {
 
   .avatar-placeholder {
     font-size: 6rem;
+  }
+}
+
+/* 无障碍：减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-content {
+    animation: none;
+  }
+
+  .hero-avatar {
+    animation: none;
+  }
+
+  .tech-tag {
+    animation: none;
   }
 }
 </style>

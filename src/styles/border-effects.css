@@ -1,0 +1,235 @@
+/* 边框特效样式模块 */
+
+/**
+ * 浏览器兼容性说明：
+ * - 目标浏览器：Chrome、Edge、Firefox、Safari 最新版本
+ * - 效果2 (fade-glow)：需要支持 CSS mask 和 linear-gradient
+ * - 效果4 (nebula)：需要支持 conic-gradient 和 CSS animation
+ * - 对于不支持这些特性的浏览器，会自动降级为简单边框
+ * - 所有效果都支持 prefers-reduced-motion 媒体查询
+ */
+
+/* ===== 浏览器兼容性回退 ===== */
+/* 对于不支持 mask、conic-gradient 的浏览器，提供简单边框回退 */
+@supports not (mask: linear-gradient(#fff 0 0)) {
+  .border--fade-glow {
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  }
+}
+
+@supports not (background: conic-gradient(from 0deg, red, blue)) {
+  .border--nebula {
+    border: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+    box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+  }
+}
+
+/* ===== CSS 变量定义 ===== */
+:root {
+  /* 边框特效基础变量 */
+  --border-width: 6px;
+  --nebula-duration: 10s;
+
+  /* 发光颜色 */
+  --border-glow-color: rgba(255, 255, 255, 0.3);
+  --border-glow-color-hover: rgba(255, 255, 255, 0.5);
+
+  /* 星云颜色序列 - 高对比度、高饱和度，确保与暗色背景有明显区分 */
+  --nebula-color-1: #e94560;  /* 玫红色 - 亮 */
+  --nebula-color-2: #9b59b6;  /* 紫色 - 亮 */
+  --nebula-color-3: #3498db;  /* 蓝色 - 亮 */
+  --nebula-color-4: #e74c3c;  /* 红橙色 - 亮 */
+  --nebula-color-5: #f39c12;  /* 金橙色 - 亮 */
+}
+
+/* 亮色主题调整 */
+:root[data-theme="light"] {
+  --border-glow-color: rgba(0, 0, 0, 0.12);
+  /* 星云颜色序列 - 高饱和度，确保与亮色背景有明显对比 */
+  --nebula-color-1: #e94560;  /* 玫红色 - 高饱和 */
+  --nebula-color-2: #9b59b6;  /* 紫色 - 高饱和 */
+  --nebula-color-3: #3498db;  /* 蓝色 - 高饱和 */
+  --nebula-color-4: #e74c3c;  /* 红橙色 - 高饱和 */
+  --nebula-color-5: #f39c12;  /* 金橙色 - 高饱和 */
+}
+
+/* ===== 效果2：淡出至透明 + 轻微发光 ===== */
+/* 类名：border--fade-glow */
+.border--fade-glow {
+  position: relative;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+/* 伪元素 ::before 创建模糊的渐变背景，使用径向渐变 mask 实现从边框向内淡出 */
+.border--fade-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-width);
+  background: linear-gradient(
+    135deg,
+    var(--border-glow-color) 0%,
+    transparent 50%,
+    var(--border-glow-color) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    radial-gradient(
+      ellipse 100% 100% at center,
+      transparent calc(100% - var(--border-width) * 1.5),
+      #fff 100%
+    );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    radial-gradient(
+      ellipse 100% 100% at center,
+      transparent calc(100% - var(--border-width) * 1.5),
+      #fff 100%
+    );
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  filter: blur(12px);
+  transition: opacity var(--transition-base), filter var(--transition-base);
+  pointer-events: none;
+}
+
+/* 确保内容在伪元素之上 */
+.border--fade-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* hover 时增强发光效果 */
+.border--fade-glow:hover::before,
+.border--fade-glow:focus-within::before {
+  background: linear-gradient(
+    135deg,
+    var(--border-glow-color-hover) 0%,
+    transparent 50%,
+    var(--border-glow-color-hover) 100%
+  );
+  opacity: 1;
+  filter: blur(16px);
+}
+
+/* focus 状态支持 */
+.border--fade-glow:focus {
+  outline: none;
+}
+
+.border--fade-glow:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ===== 效果4：星云流光边框 ===== */
+/* 类名：border--nebula */
+.border--nebula {
+  position: relative;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* 使用 conic-gradient 创建锥形渐变 */
+.border--nebula::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--border-width) * -1);
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    var(--nebula-color-1),
+    var(--nebula-color-2),
+    var(--nebula-color-3),
+    var(--nebula-color-4),
+    var(--nebula-color-5),
+    var(--nebula-color-1)
+  );
+  animation: nebula-rotate var(--nebula-duration) linear infinite;
+  filter: blur(16px) saturate(1.5);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 伪元素 ::after 覆盖内层 */
+.border--nebula::after {
+  content: '';
+  position: absolute;
+  inset: var(--border-width);
+  border-radius: calc(var(--radius-md) - var(--border-width));
+  background: conic-gradient(
+    from 0deg,
+    var(--nebula-color-1),
+    var(--nebula-color-2),
+    var(--nebula-color-3),
+    var(--nebula-color-4),
+    var(--nebula-color-5),
+    var(--nebula-color-1)
+  );
+  filter: blur(20px) saturate(1.8);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 确保内容在伪元素之上 */
+.border--nebula > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 星云旋转动画 */
+@keyframes nebula-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* hover 时增强效果 */
+.border--nebula:hover::before,
+.border--nebula:focus-within::before {
+  opacity: 1;
+  filter: blur(20px) saturate(2);
+}
+
+/* focus 状态支持 */
+.border--nebula:focus {
+  outline: none;
+}
+
+.border--nebula:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ===== 无障碍：减少动画偏好支持 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .border--fade-glow::before,
+  .border--nebula::before {
+    animation: none;
+    transition: none;
+  }
+
+  .border--nebula::before {
+    transform: rotate(0deg);
+  }
+}
+
+/* ===== 渐变动画 - 全局定义 ===== */
+@keyframes gradientShift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 100%; }
+}

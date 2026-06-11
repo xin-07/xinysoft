@@ -62,7 +62,7 @@
             v-for="tech in project.tech_stack"
             :key="tech"
             class="tech-tag"
-            :style="{ backgroundColor: getTagBackgroundColor(tech), color: getTagColor(tech) }"
+            :style="{ backgroundColor: getTagBackgroundColor(tech), color: getTagTextColor() }"
           >
             {{ tech }}
           </span>
@@ -99,7 +99,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { projectsAPI } from '../api'
-import { getTagColor, getTagBackgroundColor } from '../config/techStackColors'
+import { getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
 import ProjectBanner from '../components/project/ProjectBanner.vue'
 
 const route = useRoute()

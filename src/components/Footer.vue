@@ -115,5 +115,11 @@ const currentYear = computed(() => new Date().getFullYear())
   .footer-brand {
     align-items: center;
   }
+
+  /* 移动端触控区域优化 - WCAG触控目标尺寸建议 */
+  .footer-link {
+    width: 44px;
+    height: 44px;
+  }
 }
 </style>

@@ -1,4 +1,5 @@
 export const techStackColors = {
+  'Vue3': '#42b883',
   'Vue 3': '#4FC08D',
   'Vue': '#4FC08D',
   'Vite': '#646CFF',
@@ -25,11 +26,19 @@ export const getTagColor = (tech) => {
 }
 
 /**
- * 返回技术栈标签的浅色背景色（原色 + 12.5% 透明度）
- * 与 getTagColor 搭配使用，形成浅底+彩色文字风格
+ * 返回技术栈标签的文字颜色
+ * WCAG AA 优化方案：使用白色文字确保在彩色背景上的可读性
+ */
+export const getTagTextColor = () => {
+  return '#FFFFFF'
+}
+
+/**
+ * 返回技术栈标签的背景色（原色 + 60% 透明度）
+ * 与白色文字搭配使用，确保 WCAG AA 对比度标准 (≥ 4.5:1)
  */
 export const getTagBackgroundColor = (tech) => {
-  return `${getTagColor(tech)}20`
+  return `color-mix(in srgb, ${getTagColor(tech)} 60%, transparent)`
 }
 
 /**
@@ -40,17 +49,17 @@ export const getTagBackgroundColor = (tech) => {
 export const projectBrands = {
   1: {
     name: '鲜途智送',
-    gradient: 'linear-gradient(135deg, #e94560 0%, #ff6b81 100%)',
-    tint: 'linear-gradient(180deg, rgba(255, 107, 129, 0.06) 0%, transparent 40%)'
+    gradient: 'linear-gradient(135deg, #ff6b8a 0%, #f9a8d4 100%)',
+    tint: 'linear-gradient(180deg, rgba(249, 168, 212, 0.06) 0%, transparent 40%)'
   },
   2: {
     name: '昕悦读',
-    gradient: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',
-    tint: 'linear-gradient(180deg, rgba(78, 67, 118, 0.06) 0%, transparent 40%)'
+    gradient: 'linear-gradient(135deg, #60a5fa 0%, #22d3ee 100%)',
+    tint: 'linear-gradient(180deg, rgba(34, 211, 238, 0.06) 0%, transparent 40%)'
   },
   3: {
     name: 'xinysoft',
-    gradient: 'linear-gradient(135deg, #303d7a 0%, #6b4794 100%)',
-    tint: 'linear-gradient(180deg, rgba(107, 71, 148, 0.06) 0%, transparent 40%)'
+    gradient: 'linear-gradient(135deg, #fbbf24 0%, #f87171 100%)',
+    tint: 'linear-gradient(180deg, rgba(248, 113, 113, 0.06) 0%, transparent 40%)'
   }
 }

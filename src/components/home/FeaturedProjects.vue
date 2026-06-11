@@ -10,16 +10,18 @@
 
     <div class="featured-projects__grid">
       <ProjectCard
-        v-for="project in projects"
+        v-for="(project, index) in projects"
         :key="project.id"
         :project="project"
+        :border-effect="BORDER_EFFECTS[index % BORDER_EFFECTS.length]"
         variant="featured"
+        :style="{ '--card-index': index }"
       />
     </div>
   </section>
 
   <!-- 加载状态：骨架屏 -->
-  <section v-else-if="loading" class="featured-projects">
+  <section v-else-if="loading" class="featured-projects" aria-busy="true" aria-live="polite">
     <div class="featured-projects__header">
       <h2 class="featured-projects__title">精选项目</h2>
       <div class="featured-projects__skeleton-link"></div>
@@ -49,6 +51,9 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectCard from '../project/ProjectCard.vue'
 import { projectsAPI } from '../../api/index.js'
+
+// 边框特效循环分配
+const BORDER_EFFECTS = ['fade-glow', 'particle', 'nebula']
 
 const projects = ref([])
 const loading = ref(true)
@@ -117,6 +122,17 @@ onUnmounted(() => {
   gap: 0.75rem;
 }
 
+/* 焦点样式 */
+.featured-projects__link:focus-visible {
+  outline: 2px solid var(--color-accent, #e94560);
+  outline-offset: 2px;
+}
+
+.featured-projects__link:focus {
+  outline: 2px solid var(--color-accent, #e94560);
+  outline-offset: 2px;
+}
+
 .featured-projects__link-icon {
   transition: transform 0.2s ease;
 }
@@ -134,11 +150,8 @@ onUnmounted(() => {
 /* 卡片入场动画 */
 .featured-projects__grid > * {
   animation: featuredCardEntrance 0.4s ease-out both;
+  animation-delay: calc(var(--card-index, 0) * 0.1s + 0.05s);
 }
-
-.featured-projects__grid > *:nth-child(1) { animation-delay: 0.05s; }
-.featured-projects__grid > *:nth-child(2) { animation-delay: 0.15s; }
-.featured-projects__grid > *:nth-child(3) { animation-delay: 0.25s; }
 
 @keyframes featuredCardEntrance {
   from {

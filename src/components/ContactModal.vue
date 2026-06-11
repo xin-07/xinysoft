@@ -1,10 +1,20 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="isOpen" class="modal-overlay" @click="closeModal">
+      <div
+        v-if="isOpen"
+        class="modal-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        tabindex="-1"
+        ref="modalRef"
+        @click="closeModal"
+        @keydown.escape="closeModal"
+      >
         <div class="modal-content" @click.stop>
           <div class="modal-header">
-            <h3>联系方式</h3>
+            <h3 id="modal-title">联系方式</h3>
             <button class="close-btn" @click="closeModal">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -76,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 
 const props = defineProps({
   isOpen: {
@@ -100,6 +110,23 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const copiedText = ref('')
+const modalRef = ref(null)
+const lastFocusedElement = ref(null)
+
+// 焦点管理：打开时聚焦弹窗，关闭时返回焦点
+watch(() => props.isOpen, async (newValue) => {
+  if (newValue) {
+    // 保存当前焦点元素
+    lastFocusedElement.value = document.activeElement
+    await nextTick()
+    // 聚焦弹窗以捕获键盘事件
+    modalRef.value?.focus()
+  } else {
+    // 关闭时返回焦点到触发元素
+    await nextTick()
+    lastFocusedElement.value?.focus()
+  }
+})
 
 const getEmailLabel = (email) => {
   const domain = email.split('@')[1]?.toLowerCase()
@@ -151,6 +178,7 @@ const copyContact = async (text, label) => {
   justify-content: center;
   z-index: 2000;
   padding: 1rem;
+  outline: none;
 }
 
 .modal-content {
