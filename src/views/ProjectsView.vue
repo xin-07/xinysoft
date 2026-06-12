@@ -77,7 +77,12 @@ const fetchProjects = async () => {
 
   try {
     const result = await projectsAPI.getProjects(undefined, abortController.signal)
-    projects.value = result.data.items || []
+    // API 返回 { code, data: { items: [...] } }
+    if (result?.code === 200 && result?.data?.items) {
+      projects.value = result.data.items
+    } else {
+      projects.value = []
+    }
   } catch (err) {
     if (err.name === 'AbortError' || err.name === 'CanceledError') return
     console.error('Failed to fetch projects:', err)
