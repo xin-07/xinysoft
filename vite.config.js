@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const apiTarget = env.VITE_API_TARGET || 'http://127.0.0.1:8000'
+  const apiTarget = env.development.VITE_API_TARGET || env.production.VITE_API_TARGET
 
   return {
     plugins: [vue()],
