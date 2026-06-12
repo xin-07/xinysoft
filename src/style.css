@@ -1,7 +1,10 @@
 /* 全局样式和 CSS 变量 */
 
-/* Geist 字体 (使用 Outfit 作为 Google Fonts 替代方案) */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+/* ===== 边框特效模块 ===== */
+@import './styles/border-effects.css';
+
+/* ===== 管理后台样式模块 ===== */
+@import './styles/admin.css';
 
 /* 默认暗色主题 */
 :root,
@@ -543,9 +546,3 @@ ol {
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: var(--radius-sm);
 }
-
-/* ===== 边框特效模块 ===== */
-@import './styles/border-effects.css';
-
-/* ===== 管理后台样式模块 ===== */
-@import './styles/admin.css';

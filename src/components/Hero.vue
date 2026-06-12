@@ -127,6 +127,7 @@
 
     <!-- 联系方式弹窗 -->
     <ContactModal
+      v-if="showContactModal"
       :is-open="showContactModal"
       :wechat="profile.wechat || defaultWechat"
       :qq="profile.qq || defaultQQ"
@@ -137,10 +138,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, defineAsyncComponent } from 'vue'
 import { profileAPI } from '../api'
 import { getTagColor, getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
-import ContactModal from './ContactModal.vue'
+
+const ContactModal = defineAsyncComponent(() => import('./ContactModal.vue'))
 
 const profile = ref({})
 const loading = ref(true)
