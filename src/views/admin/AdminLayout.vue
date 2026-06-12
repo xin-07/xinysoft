@@ -3,6 +3,7 @@ import { ref, inject, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute, RouterView } from 'vue-router'
 import AdminToast from '../../components/admin/AdminToast.vue'
 import { adminAPI } from '../../api/admin'
+import { useTheme } from '../../composables/useTheme'
 
 const router = useRouter()
 const route = useRoute()
@@ -38,6 +39,8 @@ function handleLogout() {
   }
   router.push({ name: 'AdminLogin' })
 }
+
+const { currentTheme, toggleTheme } = useTheme()
 
 const navItems = [
   { name: 'AdminDashboard', path: '/admin', label: '概览', icon: '&#x1F4CA;' },
@@ -89,9 +92,19 @@ onBeforeUnmount(() => {
         <button class="admin-header__hamburger" @click="toggleSidebar" aria-label="切换菜单">
           <span>&#x2630;</span>
         </button>
-        <div class="admin-header__user">
-          <span class="admin-header__user-avatar">{{ adminName[0] || 'A' }}</span>
-          <span class="admin-header__user-name">{{ adminName }}</span>
+        <div class="admin-header__actions">
+          <button
+            class="admin-header__theme-btn"
+            @click="toggleTheme"
+            :aria-label="currentTheme === 'dark' ? '切换到亮色主题' : '切换到暗色主题'"
+          >
+            <span class="admin-header__theme-icon" v-if="currentTheme === 'dark'">☀️</span>
+            <span class="admin-header__theme-icon" v-else>🌙</span>
+          </button>
+          <div class="admin-header__user">
+            <span class="admin-header__user-avatar">{{ adminName[0] || 'A' }}</span>
+            <span class="admin-header__user-name">{{ adminName }}</span>
+          </div>
         </div>
       </div>
     </header>
@@ -133,6 +146,10 @@ onBeforeUnmount(() => {
 
       <!-- 底部退出按钮 -->
       <div class="sidebar__footer">
+        <router-link to="/" class="sidebar__footer-link" @click="closeSidebar">
+          <span class="sidebar__nav-icon">&#x1F3E0;</span>
+          <span class="sidebar__nav-label">访问前台</span>
+        </router-link>
         <button class="sidebar__logout-btn" @click="handleLogout">
           <span class="sidebar__nav-icon">&#x1F6AA;</span>
           <span class="sidebar__nav-label">退出登录</span>
@@ -203,6 +220,68 @@ onBeforeUnmount(() => {
 .admin-layout__overlay--visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* 主题切换按钮 */
+.admin-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-header__theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full, 50%);
+  background: transparent;
+  border: 1px solid var(--admin-header-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--admin-sidebar-text);
+  flex-shrink: 0;
+}
+
+.admin-header__theme-btn:hover {
+  background: var(--admin-sidebar-hover-bg);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.admin-header__theme-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.admin-header__theme-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.admin-header__theme-btn:hover .admin-header__theme-icon {
+  transform: rotate(15deg);
+}
+
+/* 侧边栏底部导航链接（访问前台） */
+.sidebar__footer-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--admin-sidebar-text);
+  font-size: 0.9rem;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar__footer-link:hover {
+  background: var(--admin-sidebar-hover-bg);
+  color: var(--admin-sidebar-text-active);
 }
 
 /* 移动端适配 */
