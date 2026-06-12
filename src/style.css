@@ -546,3 +546,6 @@ ol {
 
 /* ===== 边框特效模块 ===== */
 @import './styles/border-effects.css';
+
+/* ===== 管理后台样式模块 ===== */
+@import './styles/admin.css';

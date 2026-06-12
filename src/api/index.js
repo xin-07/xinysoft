@@ -12,6 +12,18 @@ const apiClient = axios.create({
   }
 })
 
+// 请求拦截器: 附加 Token
+apiClient.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('admin_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  error => Promise.reject(error)
+)
+
 // 递归遍历响应数据，将相对路径 /api/... 转为绝对 URL（生产环境需要）
 function resolveRelativeUrls(data) {
   if (typeof data === 'string' && data.startsWith('/api/')) {
@@ -37,6 +49,13 @@ apiClient.interceptors.response.use(
     return isProd ? resolveRelativeUrls(data) : data
   },
   error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('admin_token')
+      // 避免在登录页循环跳转
+      if (!window.location.pathname.startsWith('/admin/login')) {
+        window.location.href = '/admin/login'
+      }
+    }
     console.error('API Error:', error)
     return Promise.reject(error)
   }

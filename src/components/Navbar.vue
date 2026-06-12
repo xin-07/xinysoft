@@ -13,6 +13,14 @@
         <router-link to="/projects" class="nav-link" :class="{ active: isProjectsActive }">
           作品集
         </router-link>
+        <router-link
+          to="/admin/login"
+          class="admin-login-btn"
+          aria-label="管理后台登录"
+          title="管理后台"
+        >
+          <span class="admin-login-icon">🔒</span>
+        </router-link>
         <button
           class="theme-toggle"
           @click="toggleTheme"
@@ -38,6 +46,10 @@
       </router-link>
       <router-link to="/projects" class="mobile-nav-link" @click="closeMenu">
         作品集
+      </router-link>
+      <router-link to="/admin/login" class="mobile-nav-link" @click="closeMenu">
+        <span class="mobile-admin-icon">🔒</span>
+        管理后台
       </router-link>
       <button
         class="mobile-theme-toggle"
@@ -196,6 +208,41 @@ onUnmounted(() => {
   outline-offset: 2px;
 }
 
+/* 管理后台登录按钮 */
+.admin-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--color-accent-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.admin-login-btn:hover {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent);
+}
+
+.admin-login-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.admin-login-icon {
+  font-size: 1rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.admin-login-btn:hover .admin-login-icon {
+  transform: scale(1.15);
+}
+
 .theme-icon {
   font-size: 1.2rem;
   display: inline-block;
@@ -269,6 +316,12 @@ onUnmounted(() => {
 .mobile-nav-link:hover {
   color: var(--color-accent);
   background: var(--color-accent-light);
+}
+
+/* 移动端管理后台入口图标 */
+.mobile-admin-icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
 }
 
 /* 移动端主题切换按钮 */
