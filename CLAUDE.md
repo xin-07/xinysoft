@@ -29,6 +29,8 @@ uvicorn main:app --reload
 
 访问: http://127.0.0.1:8000 | API文档: http://127.0.0.1:8000/docs
 
+> **Agent 约束**: Agent 在工作时**不得**自动执行依赖安装（如 `conda install`、`pip install`）和项目启动（如 `uvicorn`）命令。这些操作由开发者手动执行。
+
 ## 项目结构
 
 ```
