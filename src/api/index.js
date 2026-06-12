@@ -3,7 +3,7 @@ import axios from 'axios'
 // 生产环境：直接请求后端地址；开发环境：通过 Vite proxy 转发
 const isProd = import.meta.env.PROD
 const API_BASE = isProd
-  ? (import.meta.env.development.VITE_API_TARGET || env.production.VITE_API_TARGET)
+  ? (import.meta.env.development.VITE_API_TARGET || import.meta.env.production.VITE_API_TARGET)
   : ''
 
 const apiClient = axios.create({
