@@ -1,7 +1,11 @@
 import axios from 'axios'
 
+// 生产环境：直接请求后端地址；开发环境：通过 Vite proxy 转发
+const isProd = import.meta.env.PROD
+const baseURL = isProd ? (import.meta.env.VITE_API_TARGET || 'http://127.0.0.1:8000') : ''
+
 const apiClient = axios.create({
-  baseURL: '',
+  baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
