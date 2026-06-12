@@ -212,7 +212,7 @@ async def verify(username: str = Depends(get_current_admin)):
 @router.get("/projects", summary="获取所有项目（管理端）")
 async def get_all_projects(
     page: int = Query(1, ge=1, description="页码"),
-    page_size: int = Query(10, ge=1, le=100, description="每页数量"),
+    page_size: int = Query(10, ge=1, le=1000, description="每页数量"),
     username: str = Depends(get_current_admin)
 ):
     """
