@@ -5,7 +5,7 @@ import json
 import logging
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-from urllib.parse import quote
+from pathlib import Path
 from config.database import execute_query
 from models.profile import ProfileResponse
 
@@ -63,27 +63,20 @@ def parse_json_field(value: Any) -> Any:
 
 def convert_avatar_url(avatar_path: str) -> str:
     """
-    将本地头像路径转换为可访问的 URL
+    将本地头像路径转换为前端可访问的静态资源相对路径
+
+    头像存储在 Vite public/ 目录下，构建后由 Cloudflare Pages 直接托管为静态资源
 
     Args:
         avatar_path: 本地文件路径（如 D:\\File\\photos\\落日.jpg）
 
     Returns:
-        str: 可访问的 URL（如 /api/avatar/D:/File/photos/落日.jpg）
+        str: 静态资源相对路径（如 /落日.jpg）
     """
     if not avatar_path:
         return None
 
-    # 将 Windows 路径分隔符转换为 URL 格式
-    # D:\File\photos\落日.jpg -> D:/File/photos/落日.jpg
-    url_path = avatar_path.replace('\\', '/')
-
-    # URL 编码路径中的特殊字符（如中文）
-    # 但保留路径分隔符 /
-    encoded_path = quote(url_path, safe='/')
-
-    # 返回完整的 API URL
-    return f"/api/avatar/{encoded_path}"
+    return f"/{Path(avatar_path).name}"
 
 
 @router.get("/profile", response_model=ProfileResponse, summary="获取个人资料")

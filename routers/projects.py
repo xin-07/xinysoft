@@ -5,7 +5,7 @@ import json
 import logging
 from fastapi import APIRouter, Query
 from typing import Any, Optional
-from urllib.parse import quote
+from pathlib import Path
 from config.database import execute_query, execute_query_all
 from models.project import ProjectResponse, ProjectListResponse
 from models.common import ApiResponse
@@ -40,21 +40,23 @@ def parse_json_field(value: Any) -> Any:
 
 def convert_file_url(file_path: str) -> str:
     """
-    将本地文件路径转换为可访问的 /api/files/ URL
+    将本地文件路径转换为前端可访问的静态资源相对路径
+
+    图片存储在 Vite public/ 目录下，构建后由 Cloudflare Pages 直接托管为静态资源，
+    无需经过后端 /api/files/ 代理（后端运行在 Cloudflare Linux 环境，无法访问本地磁盘）
 
     Args:
         file_path: 本地文件路径（如 D:\\Project\\web\\xinysoft_Vite\\public\\鲜途智送.png）
 
     Returns:
-        str: 可访问的 URL（如 /api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送.png）
+        str: 静态资源相对路径（如 /鲜途智送.png）
     """
     if not file_path:
         return None
 
-    # 将 Windows 路径分隔符转换为 URL 格式
-    url_path = file_path.replace('\\', '/')
-    encoded_path = quote(url_path, safe='/')
-    return f"/api/files/{encoded_path}"
+    # 提取文件名，作为前端静态资源的根相对路径
+    filename = Path(file_path).name
+    return f"/{filename}"
 
 
 def convert_file_urls(paths: list) -> list:
