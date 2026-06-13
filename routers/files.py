@@ -4,6 +4,7 @@ Project Files API 路由模块
 """
 import os
 import logging
+import unicodedata
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
@@ -65,6 +66,26 @@ def get_content_type(file_path: str) -> str:
     return content_types.get(ext, 'application/octet-stream')
 
 
+def resolve_file_path(file_path: str) -> str | None:
+    """
+    解析文件路径，处理中文文件名 Unicode 规范化差异（Windows NFC/NFD 问题）
+    先精确匹配，失败后扫描父目录做规范化比较
+    """
+    if os.path.isfile(file_path):
+        return file_path
+    parent = Path(file_path).parent
+    name = Path(file_path).name
+    if not parent.is_dir():
+        return None
+    target_norm = unicodedata.normalize('NFC', name)
+    for entry in os.listdir(parent):
+        if unicodedata.normalize('NFC', entry) == target_norm:
+            full_path = parent / entry
+            if os.path.isfile(full_path):
+                return str(full_path)
+    return None
+
+
 @router.get("/{file_path:path}", summary="获取项目图片文件")
 async def serve_file(file_path: str):
     """
@@ -92,14 +113,15 @@ async def serve_file(file_path: str):
         logger.warning(f"拒绝访问路径（不在允许目录内）: {file_path}")
         raise HTTPException(status_code=403, detail="无权访问此文件")
 
-    # 检查文件是否存在
-    if not os.path.isfile(file_path):
+    # 检查文件是否存在（处理中文编码问题）
+    resolved = resolve_file_path(file_path)
+    if not resolved:
         logger.warning(f"文件不存在: {file_path}")
         raise HTTPException(status_code=404, detail="文件不存在")
 
     # 获取 Content-Type 并返回文件
     return FileResponse(
-        path=file_path,
-        media_type=get_content_type(file_path),
-        filename=Path(file_path).name
+        path=resolved,
+        media_type=get_content_type(resolved),
+        filename=Path(resolved).name
     )
