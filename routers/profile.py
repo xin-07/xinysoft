@@ -40,18 +40,21 @@ def get_default_profile() -> Dict[str, Any]:
     }
 
 
-def parse_json_field(value: str) -> Any:
+def parse_json_field(value: Any) -> Any:
     """
     解析 JSON 字段
 
     Args:
-        value: JSON 字符串
+        value: JSON 字符串或已解析的对象（psycopg2 对 jsonb 会自动反序列化）
 
     Returns:
         解析后的 Python 对象
     """
     if value is None:
         return None
+    # psycopg2 + RealDictCursor 对 jsonb/json 字段会自动返回 Python 原生类型
+    if isinstance(value, (dict, list)):
+        return value
     try:
         return json.loads(value)
     except (json.JSONDecodeError, TypeError):
