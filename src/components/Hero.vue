@@ -141,6 +141,7 @@
 import { ref, onMounted, onUnmounted, computed, defineAsyncComponent } from 'vue'
 import { profileAPI } from '../api'
 import { getTagColor, getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
+import { resolveFilePath } from '../utils/resolvePath'
 
 const ContactModal = defineAsyncComponent(() => import('./ContactModal.vue'))
 
@@ -192,8 +193,8 @@ const avatarUrl = computed(() => {
     return url
   }
 
-  // 其他情况使用默认头像
-  return '/落日.jpg'
+  // 本地绝对路径 → 通过 API 代理访问
+  return resolveFilePath(url) || '/落日.jpg'
 })
 
 const handleAvatarError = () => {

@@ -2,8 +2,8 @@
   <div class="project-banner">
     <!-- 有封面图时显示图片 -->
     <img
-      v-if="project?.cover_url"
-      :src="project.cover_url"
+      v-if="resolvedCoverUrl"
+      :src="resolvedCoverUrl"
       :alt="project.title || '项目封面'"
       class="banner-image"
       loading="lazy"
@@ -21,6 +21,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useProjectBrand } from '../../composables/useProjectBrand'
+import { resolveFilePath } from '../../utils/resolvePath'
 import ProjectPlaceholder from './ProjectPlaceholder.vue'
 
 const props = defineProps({
@@ -35,6 +36,9 @@ const projectId = computed(() => props.project?.id)
 
 // 使用 composable 获取品牌相关样式
 const { brandName, gradientStyle } = useProjectBrand(projectId)
+
+// 封面图路径转换
+const resolvedCoverUrl = computed(() => resolveFilePath(props.project?.cover_url))
 </script>
 
 <style scoped>

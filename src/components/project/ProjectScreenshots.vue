@@ -1,10 +1,10 @@
 <template>
-  <div v-if="screenshots?.length" class="project-screenshots">
+  <div v-if="resolvedScreenshots?.length" class="project-screenshots">
     <h2 class="screenshots-title">项目截图</h2>
 
     <div class="screenshots-grid">
       <div
-        v-for="(src, index) in screenshots"
+        v-for="(src, index) in resolvedScreenshots"
         :key="index"
         class="screenshot-item"
         @click="openLightbox(index)"
@@ -39,21 +39,21 @@
         ref="lightboxRef"
       >
         <button
-          v-if="screenshots.length > 1"
+          v-if="resolvedScreenshots.length > 1"
           class="lightbox-nav lightbox-prev"
           @click.stop="prevImage"
           aria-label="上一张"
         >&#8249;</button>
 
         <img
-          :src="screenshots[lightboxIndex]"
+          :src="resolvedScreenshots[lightboxIndex]"
           :alt="`${projectTitle || '项目'} 截图 ${lightboxIndex + 1}`"
           class="lightbox-image"
           @click.stop
         />
 
         <button
-          v-if="screenshots.length > 1"
+          v-if="resolvedScreenshots.length > 1"
           class="lightbox-nav lightbox-next"
           @click.stop="nextImage"
           aria-label="下一张"
@@ -70,8 +70,9 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { Icon } from '@iconify/vue'
+import { resolveFilePath } from '../../utils/resolvePath'
 
 const props = defineProps({
   screenshots: {
@@ -82,6 +83,10 @@ const props = defineProps({
     type: String,
     default: ''
   }
+})
+
+const resolvedScreenshots = computed(() => {
+  return props.screenshots.map(s => resolveFilePath(s))
 })
 
 const lightboxIndex = ref(null)
