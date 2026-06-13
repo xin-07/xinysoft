@@ -18,6 +18,7 @@ DB_CONFIG = {
     'user': os.getenv('DB_USER', 'postgres'),
     'password': os.getenv('DB_PASSWORD', ''),
     'dbname': os.getenv('DB_NAME', 'xinysoftdb'),
+    'sslmode': os.getenv('DB_SSLMODE', 'prefer'),
     'cursor_factory': RealDictCursor
 }
 
