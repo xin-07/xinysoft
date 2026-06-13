@@ -39,21 +39,21 @@
         ref="lightboxRef"
       >
         <button
-          v-if="resolvedScreenshots.length > 1"
+          v-if="displayScreenshots.length > 1"
           class="lightbox-nav lightbox-prev"
           @click.stop="prevImage"
           aria-label="上一张"
         >&#8249;</button>
 
         <img
-          :src="resolvedScreenshots[lightboxIndex]"
+          :src="displayScreenshots[lightboxIndex]"
           :alt="`${projectTitle || '项目'} 截图 ${lightboxIndex + 1}`"
           class="lightbox-image"
           @click.stop
         />
 
         <button
-          v-if="resolvedScreenshots.length > 1"
+          v-if="displayScreenshots.length > 1"
           class="lightbox-nav lightbox-next"
           @click.stop="nextImage"
           aria-label="下一张"
@@ -72,7 +72,7 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { Icon } from '@iconify/vue'
-import { resolveFilePath } from '../../utils/resolvePath'
+import { resolveFilePath, getLocalFallback } from '../../utils/resolvePath'
 
 const props = defineProps({
   screenshots: {
@@ -87,6 +87,16 @@ const props = defineProps({
 
 const resolvedScreenshots = computed(() => {
   return props.screenshots.map(s => resolveFilePath(s))
+})
+
+// 每张截图的 public 目录降级 URL（按索引记录）
+const screenshotFallbacks = ref({})
+
+// 实际显示的 URL（优先使用降级 URL）
+const displayScreenshots = computed(() => {
+  return resolvedScreenshots.value.map((url, index) => {
+    return screenshotFallbacks.value[index] || url
+  })
 })
 
 const lightboxIndex = ref(null)
@@ -122,6 +132,13 @@ function onImageLoad(index) {
 }
 
 function onImageError(index) {
+  const rawPath = props.screenshots[index]
+  // 还没尝试过降级 → 先尝试 public 目录
+  if (rawPath && !screenshotFallbacks.value[index]) {
+    screenshotFallbacks.value = { ...screenshotFallbacks.value, [index]: getLocalFallback(rawPath) }
+    return
+  }
+  // 降级也失败了 → 显示破碎图标占位符
   const next = new Set(imageErrors.value)
   next.add(index)
   imageErrors.value = next

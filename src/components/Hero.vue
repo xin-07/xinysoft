@@ -116,7 +116,7 @@
             :src="avatarUrl"
             :alt="profile.name || 'xiny'"
             class="avatar-image"
-            @error="handleAvatarError"
+            @error="avatarFallbackUrl ? handleFallbackError() : handleAvatarError()"
           />
           <div v-else class="avatar-placeholder">
             {{ profile.name ? profile.name[0].toUpperCase() : 'X' }}
@@ -141,7 +141,7 @@
 import { ref, onMounted, onUnmounted, computed, defineAsyncComponent } from 'vue'
 import { profileAPI } from '../api'
 import { getTagColor, getTagTextColor, getTagBackgroundColor } from '../config/techStackColors'
-import { resolveFilePath } from '../utils/resolvePath'
+import { resolveFilePath, getLocalFallback } from '../utils/resolvePath'
 
 const ContactModal = defineAsyncComponent(() => import('./ContactModal.vue'))
 
@@ -149,6 +149,7 @@ const profile = ref({})
 const loading = ref(true)
 const showContactModal = ref(false)
 const avatarError = ref(false)
+const avatarFallbackUrl = ref(null)
 const abortController = new AbortController()
 
 const defaultTags = ['Vue3', 'FastAPI', 'MySQL', 'OpenClaw', 'HarmonyOS', 'ECharts']
@@ -172,7 +173,11 @@ const handleTagClick = (tag) => {
 }
 
 const avatarUrl = computed(() => {
-  // 头像加载失败后显示首字母占位符
+  // 后端失败后使用 public 目录降级
+  if (avatarFallbackUrl.value) {
+    return avatarFallbackUrl.value
+  }
+  // 两次都失败，显示首字母占位符
   if (avatarError.value) {
     return null
   }
@@ -183,22 +188,31 @@ const avatarUrl = computed(() => {
 
   const url = profile.value.avatar_url
 
-  // 如果是网络URL，直接返回
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
 
-  // 如果是后端返回的相对路径（以 /api/avatar 开头），直接走代理
   if (url.startsWith('/api/avatar')) {
     return url
   }
 
-  // 本地绝对路径 → 通过 API 代理访问
   return resolveFilePath(url) || '/落日.jpg'
 })
 
 const handleAvatarError = () => {
+  const rawPath = profile.value.avatar_url
+  // 有原始路径 → 尝试 public 目录降级
+  if (rawPath) {
+    avatarFallbackUrl.value = getLocalFallback(rawPath)
+  } else {
+    avatarError.value = true
+  }
+}
+
+// public 目录降级也失败 → 最终降级到首字母占位符
+const handleFallbackError = () => {
   avatarError.value = true
+  avatarFallbackUrl.value = null
 }
 
 const fetchProfile = async () => {

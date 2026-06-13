@@ -19,6 +19,7 @@
           :alt="project.title || '项目封面'"
           class="project-card__image"
           loading="lazy"
+          @error="coverFallbackUrl ? handleFallbackError() : handleCoverError()"
         />
         <ProjectPlaceholder
           v-else
@@ -82,11 +83,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { getTagColor, getTagTextColor, getTagBackgroundColor, projectBrands } from '../../config/techStackColors'
-import { resolveFilePath } from '../../utils/resolvePath'
+import { resolveFilePath, getLocalFallback } from '../../utils/resolvePath'
 import { useProjectBrand } from '../../composables/useProjectBrand'
 import ParticleBorder from './ParticleBorder.vue'
 import ProjectPlaceholder from './ProjectPlaceholder.vue'
@@ -116,8 +117,29 @@ const projectId = computed(() => props.project?.id)
 // 使用 composable 获取品牌相关样式
 const { brandName, gradientStyle, cardContentStyle } = useProjectBrand(projectId)
 
-// 封面图路径转换
-const resolvedCoverUrl = computed(() => resolveFilePath(props.project?.cover_url))
+// 封面图路径转换（支持后端 → public 目录 → 占位符 三级降级）
+const coverFallbackUrl = ref(null)
+const coverError = ref(false)
+const resolvedCoverUrl = computed(() => {
+  if (coverError.value) return null
+  if (coverFallbackUrl.value) return coverFallbackUrl.value
+  return resolveFilePath(props.project?.cover_url)
+})
+
+const handleCoverError = () => {
+  const rawPath = props.project?.cover_url
+  if (rawPath) {
+    coverFallbackUrl.value = getLocalFallback(rawPath)
+  } else {
+    coverError.value = true
+  }
+}
+
+// public 目录降级也失败 → 最终降级到 ProjectPlaceholder 占位符
+const handleFallbackError = () => {
+  coverError.value = true
+  coverFallbackUrl.value = null
+}
 
 // 品牌名称（来自 composable）
 
