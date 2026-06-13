@@ -4,7 +4,7 @@
 
     <div class="screenshots-grid">
       <div
-        v-for="(src, index) in resolvedScreenshots"
+        v-for="(src, index) in displayScreenshots"
         :key="index"
         class="screenshot-item"
         @click="openLightbox(index)"
