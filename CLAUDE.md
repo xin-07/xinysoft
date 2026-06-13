@@ -6,9 +6,12 @@
 
 ## 技术栈
 
-- FastAPI 0.136.3 + MySQL 8.4.9 + Python 3.10+
-- 字符编码: UTF-8 (utf8mb4_unicode_ci)
+- FastAPI 0.136.3 + PostgreSQL (psycopg2) + Python 3.10+
+- 认证: JWT (python-jose) + bcrypt
+- 部署: Mangum (AWS Lambda / ASGI)
+- 字符编码: UTF-8
 - 环境管理: Miniforge (推荐)
+- 配置管理: .env (python-dotenv)，参考 .env.example
 
 ## 快速启动
 
@@ -21,7 +24,7 @@ conda activate xinysoftenv
 conda install -f requirements.txt
 
 # 3. 配置数据库
-mysql -u root -p xinysoft < xinysoft.sql
+psql -U postgres -d xinysoft -f xinysoft.sql
 
 # 4. 运行项目
 uvicorn main:app --reload
@@ -35,12 +38,28 @@ uvicorn main:app --reload
 
 ```
 xinysoft_FastAPI/
-├── config/          # 数据库配置
-├── models/          # Pydantic 模型
-├── routers/         # API 路由
-├── main.py          # 应用入口
-├── requirements.txt
-└── xinysoft.sql     # 数据库脚本
+├── config/              # 数据库配置 & 认证配置
+│   ├── database.py      #   PostgreSQL 连接 (psycopg2)
+│   └── auth.py          #   JWT 认证
+├── models/              # Pydantic 模型
+│   ├── profile.py       #   个人资料
+│   ├── project.py       #   项目经历
+│   ├── admin.py         #   管理员
+│   └── common.py        #   通用响应模型
+├── routers/             # API 路由
+│   ├── profile.py       #   个人资料接口
+│   ├── projects.py      #   项目经历接口
+│   ├── avatar.py        #   头像上传接口
+│   ├── files.py         #   文件上传接口
+│   ├── admin.py         #   管理后台接口
+│   └── admin_auth.py    #   管理员认证接口
+├── sql/                 # 数据库脚本
+│   ├── PostgreSQL/      #   PostgreSQL 版本（当前使用）
+│   └── MySQL/           #   MySQL 版本（旧）
+├── main.py              # 应用入口
+├── requirements.txt     # Python 依赖
+├── .env.example         # 环境变量模板
+└── .gitignore
 ```
 
 ## API 规范
