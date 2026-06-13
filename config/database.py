@@ -3,8 +3,8 @@
 """
 import os
 from dotenv import load_dotenv
-import pymysql
-from pymysql.cursors import DictCursor
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from typing import Optional, Dict, Any
 from contextlib import contextmanager
 
@@ -14,23 +14,22 @@ load_dotenv()
 # 数据库配置
 DB_CONFIG = {
     'host': os.getenv('DB_HOST', 'localhost'),
-    'port': int(os.getenv('DB_PORT', 3306)),
-    'user': os.getenv('DB_USER', 'root'),
+    'port': int(os.getenv('DB_PORT', 5432)),
+    'user': os.getenv('DB_USER', 'postgres'),
     'password': os.getenv('DB_PASSWORD', ''),
-    'database': os.getenv('DB_NAME', 'xinysoft'),
-    'charset': 'utf8mb4',
-    'cursorclass': DictCursor
+    'dbname': os.getenv('DB_NAME', 'xinysoftdb'),
+    'cursor_factory': RealDictCursor
 }
 
 
-def get_connection() -> pymysql.Connection:
+def get_connection() -> psycopg2.extensions.connection:
     """
     获取数据库连接
 
     Returns:
-        pymysql.Connection: 数据库连接对象
+        psycopg2.extensions.connection: 数据库连接对象
     """
-    return pymysql.connect(**DB_CONFIG)
+    return psycopg2.connect(**DB_CONFIG)
 
 
 @contextmanager
@@ -39,7 +38,7 @@ def get_db():
     数据库连接上下文管理器
 
     Yields:
-        pymysql.Connection: 数据库连接对象
+        psycopg2.extensions.connection: 数据库连接对象
     """
     conn = None
     try:

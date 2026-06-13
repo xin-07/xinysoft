@@ -47,12 +47,13 @@ def execute_modify(sql, params=None) -> int:
 
 
 def execute_insert(sql, params=None) -> int:
-    """执行 INSERT，返回新插入的 ID"""
+    """执行 INSERT，返回新插入的 ID（PostgreSQL 使用 RETURNING 子句）"""
     with get_db() as conn:
         with conn.cursor() as cursor:
-            cursor.execute(sql, params)
+            sql_returning = sql.rstrip(';') + ' RETURNING id'
+            cursor.execute(sql_returning, params)
             conn.commit()
-            return cursor.lastrowid
+            return cursor.fetchone()['id']
 
 
 def parse_json_field(value: str) -> Any:
@@ -415,7 +416,7 @@ async def update_project(
             values.append(value)
 
         values.append(project_id)
-        sql = f"UPDATE projects SET {', '.join(set_parts)} WHERE id = %s"
+        sql = f"UPDATE projects SET {', '.join(set_parts)}, updated_at = CURRENT_TIMESTAMP WHERE id = %s"
         execute_modify(sql, tuple(values))
 
         # 查询更新后的项目
@@ -504,7 +505,7 @@ async def update_project_status(
             }
 
         execute_modify(
-            "UPDATE projects SET status = %s WHERE id = %s",
+            "UPDATE projects SET status = %s, updated_at = CURRENT_TIMESTAMP WHERE id = %s",
             (req.status, project_id)
         )
 
@@ -612,7 +613,7 @@ async def update_admin_profile(
             values.append(value)
 
         values.append(1)
-        sql = f"UPDATE profile SET {', '.join(set_parts)} WHERE id = %s"
+        sql = f"UPDATE profile SET {', '.join(set_parts)}, updated_at = CURRENT_TIMESTAMP WHERE id = %s"
         execute_modify(sql, tuple(values))
 
         # 查询更新后的 profile
