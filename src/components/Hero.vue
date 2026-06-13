@@ -188,13 +188,8 @@ const avatarUrl = computed(() => {
 
   const url = profile.value.avatar_url
 
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-
-  if (url.startsWith('/api/avatar')) {
-    return url
-  }
+  // avatar 专用快捷路径（不走 resolveFilePath 的通用逻辑）
+  if (url.startsWith('/api/avatar')) return url
 
   return resolveFilePath(url) || '/落日.jpg'
 })
