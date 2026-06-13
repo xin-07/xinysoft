@@ -6,7 +6,7 @@
       :src="resolvedCoverUrl"
       :alt="project.title || '项目封面'"
       class="banner-image"
-      loading="lazy"
+      fetchpriority="high"
       @error="coverFallbackUrl ? handleFallbackError() : handleCoverError()"
     />
     <!-- 无封面图时显示 6 层占位效果（与卡片封面一致） -->
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useProjectBrand } from '../../composables/useProjectBrand'
 import { resolveFilePath, getLocalFallback } from '../../utils/resolvePath'
 import ProjectPlaceholder from './ProjectPlaceholder.vue'
@@ -61,6 +61,12 @@ const handleFallbackError = () => {
   coverError.value = true
   coverFallbackUrl.value = null
 }
+
+// 项目切换时重置错误状态，允许新项目的封面图重新尝试加载
+watch(() => props.project?.id, () => {
+  coverError.value = false
+  coverFallbackUrl.value = null
+})
 </script>
 
 <style scoped>

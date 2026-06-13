@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { getTagColor, getTagTextColor, getTagBackgroundColor, projectBrands } from '../../config/techStackColors'
@@ -140,6 +140,12 @@ const handleFallbackError = () => {
   coverError.value = true
   coverFallbackUrl.value = null
 }
+
+// 项目切换时重置错误状态，允许新项目的封面图重新尝试加载
+watch(() => props.project?.id, () => {
+  coverError.value = false
+  coverFallbackUrl.value = null
+})
 
 // 品牌名称（来自 composable）
 

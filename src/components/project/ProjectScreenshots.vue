@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { Icon } from '@iconify/vue'
 import { resolveFilePath, getLocalFallback } from '../../utils/resolvePath'
 
@@ -162,6 +162,13 @@ function handleKeydown(e) {
       break
   }
 }
+
+// 截图数据变化时重置所有加载状态，允许新数据重新尝试加载
+watch(() => props.screenshots, () => {
+  screenshotFallbacks.value = {}
+  loadedImages.value = new Set()
+  imageErrors.value = new Set()
+}, { deep: true })
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
