@@ -5,7 +5,7 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from routers import profile, avatar, projects, files, admin
+from routers import profile, avatar, projects, files, admin, webhook
 
 # 配置日志
 logging.basicConfig(
@@ -62,6 +62,7 @@ app.include_router(avatar.router)
 app.include_router(projects.router)
 app.include_router(files.router)
 app.include_router(admin.router)
+app.include_router(webhook.router)
 
 
 @app.get("/", summary="根路径测试")
