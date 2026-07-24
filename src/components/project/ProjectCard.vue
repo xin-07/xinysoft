@@ -76,6 +76,15 @@
             <Icon icon="mdi:link" class="project-card__btn-icon" />
             线上地址
           </button>
+          <button
+            v-if="project?.repo_url"
+            class="project-card__btn project-card__btn--secondary"
+            @click.stop="openRepoUrl"
+            aria-label="访问仓库地址"
+          >
+            <Icon icon="mdi:github" class="project-card__btn-icon" />
+            仓库地址
+          </button>
         </div>
       </div>
     </div>
@@ -217,6 +226,13 @@ const handleCardClick = () => {
 const openLiveUrl = () => {
   if (props.project?.live_url) {
     window.open(props.project.live_url, '_blank')
+  }
+}
+
+// 打开仓库地址
+const openRepoUrl = () => {
+  if (props.project?.repo_url) {
+    window.open(props.project.repo_url, '_blank')
   }
 }
 </script>

@@ -97,6 +97,20 @@
           </svg>
           访问线上地址
         </a>
+
+        <!-- 仓库地址按钮 -->
+        <a
+          v-if="project.repo_url"
+          :href="project.repo_url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="repo-url-btn"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.245-1.695-.425-.225-.925-.78-.015-.795.85-.015 1.455.78 1.65 1.11.965 1.625 2.51 1.165 3.135.885.1-.69.39-1.17.705-1.44-2.475-.27-5.07-1.26-5.07-5.625 0-1.245.435-2.25 1.17-3.06-.12-.285-.51-1.455.12-3.015 0 0 .945-.3 3.09 1.17.9-.255 1.845-.375 2.79-.375.945 0 1.89.12 2.79.375 2.145-1.485 3.09-1.17 3.09-1.17.63 1.56.225 2.73.12 3.015.735.81 1.17 1.815 1.17 3.06 0 4.38-2.61 5.355-5.1 5.625.405.345.75 1.005.75 2.04 0 1.47-.015 2.655-.015 3.015 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          访问仓库地址
+        </a>
       </div>
     </div>
   </div>
@@ -385,6 +399,32 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
+/* 仓库地址按钮 */
+.repo-url-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-left: 0.75rem;
+}
+
+.repo-url-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.repo-url-btn svg {
+  flex-shrink: 0;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .project-detail {
@@ -406,6 +446,18 @@ onUnmounted(() => {
   .tech-tag {
     font-size: 0.8125rem;
     padding: 0.3rem 0.75rem;
+  }
+
+  .repo-url-btn {
+    margin-left: 0;
+    margin-top: 0.75rem;
+  }
+
+  .live-url-btn,
+  .repo-url-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 }
 
