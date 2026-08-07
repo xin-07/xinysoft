@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "Read(//d/Project/python_project/xinysoft_FastAPI/routers/**)",
+      "Read(//d/Project/python_project/xinysoft_FastAPI/models/**)",
+      "Read(//d/Project/python_project/xinysoft_FastAPI/**)"
+    ]
+  }
+}
