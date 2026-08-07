@@ -12,7 +12,7 @@
  Target Server Version : 180004 (180004)
  File Encoding         : 65001
 
- Date: 13/06/2026 15:52:56
+ Date: 07/08/2026 14:10:54
 */
 
 
@@ -191,9 +191,10 @@ COMMENT ON TABLE "public"."projects" IS '项目作品集表';
 -- ----------------------------
 -- Records of projects
 -- ----------------------------
-INSERT INTO "public"."projects" VALUES (1, '智能路径规划与物流配送系统', '鲜途智送 · 物流配送智能管理平台', '基于 Vue 3 的智能路径优化与物流配送管理系统，集成天地图 API，提供路径规划、团队协作、仓库管理、大屏数据可视化等功能。后端采用 Flask 框架，使用混合蚁群-粒子群优化算法解决车辆路径问题(VRP)，实现高效的配送路线规划。', '["Vue 3", "Vite", "Three.js", "天地图 API", "ECharts", "Flask", "MySQL", "Redis", "蚂蚁群+粒子群混合算法"]', NULL, '["D:/Project/web/xinysoft_Vite/public/鲜途智送-首页.png", "D:/Project/web/xinysoft_Vite/public/鲜途智送-主页.png", "D:/Project/web/xinysoft_Vite/public/鲜途智送-底部订单管理.png"]', 'https://smile050417.site/', NULL, 't', 3, 'published', '2026-06-10 18:50:40', '2026-06-11 18:36:24');
-INSERT INTO "public"."projects" VALUES (2, '昕悦读 分布式小说阅读系统', 'HarmonyOS 原生小说阅读应用', '基于 HarmonyOS（鸿蒙）平台开发的小说阅读应用，采用 Spring Boot 微服务架构与 MySQL 数据库，前端使用 ArkTS + ArkUI 构建原生鸿蒙界面。支持多本书籍在线阅读、用户登录注册、阅读进度同步等功能。', '["Spring Boot", "MySQL", "MyBatis", "ArkTS", "ArkUI", "HarmonyOS"]', NULL, NULL, NULL, NULL, 'f', 2, 'published', '2026-06-10 18:50:40', '2026-06-11 11:10:11');
-INSERT INTO "public"."projects" VALUES (3, 'xinysoft 个人作品集', 'Vue 3 + FastAPI 全栈个人网站', '基于 Vue 3 + Vite 构建的个人作品集网站，后端使用 FastAPI + MySQL 提供 API 服务。包含个人资料展示、项目作品集、主题切换、响应式设计等功能，用于展示个人品牌与技术能力。', '["Vue 3", "Vite", "Vue Router", "FastAPI", "MySQL", "PyMySQL"]', NULL, NULL, NULL, NULL, 't', 1, 'published', '2026-06-10 18:50:40', '2026-06-10 18:50:40');
+INSERT INTO "public"."projects" VALUES (4, 'Jack要加油的内容分享', 'Jack要加油', '分享Jack要加油的专属会员的内容', '["Bun", "VitePress", "MarkDown"]', '/uploads/2026-08-07/97e456b5c1ec49a99bf753cd053f16e8.png', '["/uploads/2026-08-07/b9cbb996c8cd412f8345e0995e344090.png"]', 'https://jack.xiny06.workers.dev/', 'https://github.com/xin-07/Jack-refinedShare.git', 't', 1, 'published', '2026-08-07 13:43:00.998896', '2026-08-07 14:03:34.146985');
+INSERT INTO "public"."projects" VALUES (1, '智能路径规划与物流配送系统', '鲜途智送 · 物流配送智能管理平台', '基于 Vue 3 的智能路径优化与物流配送管理系统，集成天地图 API，提供路径规划、团队协作、仓库管理、大屏数据可视化等功能。后端采用 Flask 框架，使用混合蚁群-粒子群优化算法解决车辆路径问题(VRP)，实现高效的配送路线规划。', '["Vue 3", "Vite", "Three.js", "天地图 API", "ECharts", "Flask", "MySQL", "Redis", "蚂蚁群+粒子群混合算法"]', '', '["/鲜途智送-首页.png", "/鲜途智送-主页.png", "/鲜途智送-底部订单管理.png"]', '', '', 't', 3, 'published', '2026-06-10 18:50:40', '2026-07-24 17:17:35.52141');
+INSERT INTO "public"."projects" VALUES (3, 'xinysoft 个人作品集', 'Vue 3 + FastAPI 全栈个人网站', '基于 Vue 3 + Vite 构建的个人作品集网站，后端使用 FastAPI + MySQL 提供 API 服务。包含个人资料展示、项目作品集、主题切换、响应式设计等功能，用于展示个人品牌与技术能力。', '["Vue 3", "Vite", "Vue Router", "FastAPI", "MySQL", "PyMySQL"]', '', NULL, 'https://xinysoft.pages.dev/', 'https://github.com/xin-07/xinysoft.git', 't', 2, 'published', '2026-06-10 18:50:40', '2026-08-07 13:52:36.781066');
+INSERT INTO "public"."projects" VALUES (2, '昕悦读 分布式小说阅读系统', 'HarmonyOS 原生小说阅读应用', '基于 HarmonyOS（鸿蒙）平台开发的小说阅读应用，采用 Spring Boot 微服务架构与 MySQL 数据库，前端使用 ArkTS + ArkUI 构建原生鸿蒙界面。支持多本书籍在线阅读、用户登录注册、阅读进度同步等功能。', '["Spring Boot", "MySQL", "MyBatis", "ArkTS", "ArkUI", "HarmonyOS"]', '', NULL, '', '', 'f', 0, 'draft', '2026-06-10 18:50:40', '2026-08-07 13:52:51.226419');
 
 -- ----------------------------
 -- Alter sequences owned by
@@ -221,7 +222,7 @@ SELECT setval('"public"."profile_id_seq"', 1, true);
 -- ----------------------------
 ALTER SEQUENCE "public"."projects_id_seq"
 OWNED BY "public"."projects"."id";
-SELECT setval('"public"."projects_id_seq"', 3, true);
+SELECT setval('"public"."projects_id_seq"', 4, true);
 
 -- ----------------------------
 -- Uniques structure for table admin_users

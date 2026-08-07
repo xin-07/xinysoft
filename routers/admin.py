@@ -84,12 +84,17 @@ def convert_file_url(file_path: str) -> str:
 
     Args:
         file_path: 本地文件路径（如 D:\\Project\\web\\xinysoft_Vite\\public\\鲜途智送.png）
+                   或已转换的 API 路径（如 /api/files/D%3A/.../xxx.png）
 
     Returns:
         str: 可访问的 URL（如 /api/files/D:/Project/web/xinysoft_Vite/public/鲜途智送.png）
     """
     if not file_path:
         return None
+
+    # 已经是 /api/files/ 格式，直接返回避免二次编码
+    if file_path.startswith('/api/files/'):
+        return file_path
 
     # 将 Windows 路径分隔符转换为 URL 格式
     url_path = file_path.replace('\\', '/')

@@ -3,6 +3,7 @@ Project API 路由模块
 """
 import json
 import logging
+from urllib.parse import unquote
 from fastapi import APIRouter, Query
 from typing import Any, Optional
 from pathlib import Path
@@ -47,14 +48,41 @@ def convert_file_url(file_path: str) -> str:
 
     Args:
         file_path: 本地文件路径（如 D:\\Project\\web\\xinysoft_Vite\\public\\鲜途智送.png）
+                   或已转换的 API 路径（如 /api/files/D%3A/.../uploads/2026-08-07/xxx.png）
 
     Returns:
-        str: 静态资源相对路径（如 /鲜途智送.png）
+        str: 静态资源相对路径（如 /鲜途智送.png 或 /uploads/2026-08-07/xxx.png）
     """
     if not file_path:
         return None
 
-    # 提取文件名，作为前端静态资源的根相对路径
+    # 处理已转换为 /api/files/ 格式的路径（向后兼容旧数据）
+    if file_path.startswith('/api/files/'):
+        # 从 URL 编码的绝对路径中提取 public/ 之后的相对路径
+        # 如 /api/files/D%3A/.../public/uploads/2026-08-07/xxx.png → /uploads/2026-08-07/xxx.png
+        try:
+            decoded = file_path[len('/api/files/'):]
+            decoded = unquote(decoded)
+            public_marker = 'public'
+            idx = decoded.lower().find(public_marker)
+            if idx != -1:
+                relative = decoded[idx + len(public_marker):]
+                return relative.replace('\\', '/') if relative.startswith(('/', '\\')) else f'/{relative}'
+        except Exception:
+            pass
+        # 解析失败则提取文件名作为降级
+        filename = Path(file_path).name
+        try:
+            filename = unquote(filename)
+        except Exception:
+            pass
+        return f"/{filename}"
+
+    # 已经是相对路径（如 /uploads/2026-08-07/xxx.png），直接返回
+    if file_path.startswith('/'):
+        return file_path
+
+    # Windows 绝对路径（如 D:\...\public\鲜途智送.png），提取文件名
     filename = Path(file_path).name
     return f"/{filename}"
 
