@@ -356,26 +356,13 @@ const openRepoUrl = () => {
   flex: 1;
 }
 
-.project-card--featured .project-card__description {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.project-card--list .project-card__description {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+/* 不限制描述文字行数，完整展示内容 */
 
 /* Action buttons */
 .project-card__actions {
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
   margin-top: auto;
 }
 
@@ -390,6 +377,7 @@ const openRepoUrl = () => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .project-card__btn--primary {

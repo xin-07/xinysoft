@@ -143,8 +143,9 @@ onUnmounted(() => {
 /* 项目网格 */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, 400px);
   gap: 2rem;
+  justify-content: center;
 }
 
 /* 卡片入场动画 */
@@ -274,9 +275,9 @@ onUnmounted(() => {
 }
 
 /* 响应式布局 */
-@media (max-width: 1199px) {
+@media (max-width: 800px) {
   .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
@@ -298,15 +299,6 @@ onUnmounted(() => {
   }
 }
 
-/* 600px断点 - 保持两列布局 */
-@media (min-width: 600px) and (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-/* 600px以下 - 单列布局 */
 @media (max-width: 599px) {
   .projects-grid {
     grid-template-columns: 1fr;

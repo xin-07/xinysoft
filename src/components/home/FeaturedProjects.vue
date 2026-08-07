@@ -147,7 +147,7 @@ onUnmounted(() => {
 
 .featured-projects__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 1.5rem;
 }
 
@@ -259,12 +259,6 @@ onUnmounted(() => {
 }
 
 /* 响应式设计 */
-@media (max-width: 1199px) {
-  .featured-projects__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 767px) {
   .featured-projects {
     padding: 3rem 1.5rem;

@@ -160,23 +160,13 @@
   z-index: 0;
 }
 
-/* 伪元素 ::after 覆盖内层 */
+/* 伪元素 ::after 覆盖内层，遮罩内侧内容区域以保持一致的 var(--color-surface) 背景 */
 .border--nebula::after {
   content: '';
   position: absolute;
   inset: var(--border-width);
   border-radius: calc(var(--radius-md) - var(--border-width));
-  background: conic-gradient(
-    from 0deg,
-    var(--nebula-color-1),
-    var(--nebula-color-2),
-    var(--nebula-color-3),
-    var(--nebula-color-4),
-    var(--nebula-color-5),
-    var(--nebula-color-1)
-  );
-  filter: blur(20px) saturate(1.8);
-  opacity: 0.5;
+  background: var(--color-surface);
   pointer-events: none;
   z-index: 1;
 }

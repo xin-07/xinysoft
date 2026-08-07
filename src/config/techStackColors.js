@@ -61,5 +61,10 @@ export const projectBrands = {
     name: 'xinysoft',
     gradient: 'linear-gradient(135deg, #fbbf24 0%, #f87171 100%)',
     tint: 'linear-gradient(180deg, rgba(248, 113, 113, 0.06) 0%, transparent 40%)'
+  },
+  4: {
+    name: 'Jack要加油',
+    gradient: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)',
+    tint: 'transparent'
   }
 }

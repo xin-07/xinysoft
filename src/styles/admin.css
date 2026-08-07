@@ -1251,7 +1251,7 @@
   object-fit: cover;
 }
 
-.file-uploader__preview-item .remove-btn {
+.file-uploader__preview-remove {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -1267,9 +1267,10 @@
   cursor: pointer;
   border: none;
   transition: background var(--transition-fast);
+  z-index: 1;
 }
 
-.file-uploader__preview-item .remove-btn:hover {
+.file-uploader__preview-remove:hover {
   background: var(--admin-status-error);
 }
 
