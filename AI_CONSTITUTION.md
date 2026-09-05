@@ -6,6 +6,8 @@
 
 每次代码变更的 commit 必须含 Why/What（根因三选一： design/code/test wrong）
 
+纯文档变更（docs）单独提交时，可省略 Why/What。
+
 
 
 ## Article 2.
