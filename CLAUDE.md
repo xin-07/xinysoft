@@ -1,5 +1,7 @@
 # xinysoft
 
+> 每次 AI 对话开始前，必须先阅读项目根目录的 `AI_CONSTITUTION.md`（`d:\Project\web\xinysoft_Vite\AI_CONSTITUTION.md`），所有操作都必须遵守其中每一条规定。
+
 一个基于 Vite 构建的 Vue 3 项目。
 
 ## 技术栈
